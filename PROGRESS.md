@@ -7,7 +7,39 @@
 - Terraform: v1.14.8
 - GitHub: https://github.com/darrelldhale/sre-lite-lab
 
-## Month 1 — SRE Foundations
+---
+
+## Month 1 — SRE Foundations ⬅️ IN PROGRESS
+
+### Week 1 — Linux Internals (In Progress)
+- [ ] Processes, PIDs, parent/child relationships
+- [ ] Signals and how the kernel communicates with processes
+- [ ] File descriptors and why everything is a file
+- [ ] systemd: units, targets, journald
+- [ ] cgroups: resource limits and container foundations
+
+### Week 2 — Bash Scripting (Planned)
+- [ ] Variables, conditionals, loops
+- [ ] Functions and script structure
+- [ ] Error handling: exit codes, set -euo pipefail
+- [ ] Real scripts that do real things
+
+### Week 3 — Networking Fundamentals (Planned)
+- [ ] TCP/IP: how packets actually move
+- [ ] DNS: resolution from stub to root
+- [ ] HTTP: requests, responses, status codes
+- [ ] TLS: handshake, certificates, trust chains
+- [ ] Debugging tools: curl, dig, netstat, tcpdump
+
+### Week 4 — Git Workflows + AWS CLI + IAM (Planned)
+- [ ] Git branching strategies for infrastructure
+- [ ] AWS CLI mastery: profiles, output formats, JMESPath
+- [ ] IAM: users, roles, policies, least privilege
+- [ ] Your first runbook as code exercise
+
+---
+
+## Month 2 — AWS Infrastructure ✅
 
 ### Week 1 ✅
 - Configured AWS CLI and Terraform in WSL
@@ -36,41 +68,52 @@
 - Received ALARM and OK email notifications via SNS
 - Wrote runbook for high CPU incident response
 - Wrote post-mortem documenting root cause and lessons learned
-- Learned: chaos engineering, CPU burst credits, alarm dimensions,
-  incident documentation
+- Learned: chaos engineering, CPU burst credits, alarm dimensions, incident documentation
 
-## Month 2 — Infrastructure as Code (Planned)
-- Terraform deep dive: state, modules, workspaces
+---
+
+## Month 3 — Infrastructure as Code (Planned)
+- Terraform remote state, modules, workspaces
 - CloudFormation as backup skill
 - SSM at scale
 - Tagging strategies and cost accountability
 
-## Month 3 — Compute, Containers & Deployment (Planned)
+---
+
+## Month 4 — Compute, Containers & Deployment (Planned)
 - EC2 deep dive: launch templates, AMIs, Auto Scaling Groups
 - Docker fundamentals and ECS Fargate
 - Blue/Green and canary deployment patterns
 - Introduction to EKS
 
-## Month 4 — Observability (Planned)
+---
+
+## Month 5 — Observability (Planned)
 - CloudWatch the right way: structured logging, X-Ray tracing
 - Real on-call dashboard
 - SLIs, SLOs, error budgets
 - Synthetic monitoring and canaries
 
-## Month 5 — Incident Management & Chaos Engineering (Planned)
+---
+
+## Month 6 — Incident Management & Chaos Engineering (Planned)
 - Full incident response playbook
 - AWS Fault Injection Simulator (FIS)
 - Runnable runbooks
 - On-call simulation exercises
 - Backup/restore and DR testing
 
-## Month 6 — Security, Networking & Cost (Planned)
+---
+
+## Month 7 — Security, Networking & Cost (Planned)
 - AWS Security Hub, GuardDuty, Config
 - VPC Flow Logs
 - Secrets Manager and Parameter Store
 - FinOps: Cost Explorer, Budgets, rightsizing
 
-## Month 7 — Capstone (Planned)
+---
+
+## Month 8 — Capstone (Planned)
 - Multi-tier, highly available production-grade system
 - Full IaC, observability, CI/CD pipeline
 - Chaos engineering with own runbooks
