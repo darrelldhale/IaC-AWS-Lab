@@ -12,17 +12,20 @@
 ## Month 1 — SRE Foundations ⬅️ IN PROGRESS
 
 ### Week 1 — Linux Internals (In Progress)
-- [X] Processes, PIDs, parent/child relationships
-- [X] Signals and how the kernel communicates with processes
-- [X] File descriptors and why everything is a file
-- [X] systemd: units, targets, journald
-- [X] cgroups: resource limits and container foundations
+- [x] Processes, PIDs, parent/child relationships
+- [x] Signals and how the kernel communicates with processes
+- [x] File descriptors and why everything is a file
+- [x] systemd: units, targets, journald
+- [x] cgroups: resource limits and container foundations
 
-### Week 2 — Bash Scripting (Planned)
-- [ ] Variables, conditionals, loops
-- [ ] Functions and script structure
-- [ ] Error handling: exit codes, set -euo pipefail
-- [ ] Real scripts that do real things
+### Week 2 — Bash Scripting (In Progress)
+- [x] Variables, conditionals, loops
+- [x] Functions and script structure
+- [x] Error handling: set -euo pipefail, ||, exit codes
+- [x] Built sre-snapshot.sh — captures full system state on arrival
+- [x] Built sre-healthcheck.sh — 5-layer pass/fail health report
+- [ ] sre-watchdog.sh — monitors a service and restarts if it dies
+- [ ] sre-logdig.sh — searches logs across services for a pattern
 
 ### Week 3 — Networking Fundamentals (Planned)
 - [ ] TCP/IP: how packets actually move
