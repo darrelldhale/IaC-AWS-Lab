@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script captures a snapshot of the system's state before an investigation, including uptime, logged-in users, top resource consumers, disk usage, memory status, listening ports, failed services, recent errors, and OOM kills. The snapshot is saved to a timestamped file for later analysis.
+
 # Catches any failures and exits
 set -euo pipefail
 
