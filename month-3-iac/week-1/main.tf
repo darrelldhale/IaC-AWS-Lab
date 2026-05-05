@@ -91,7 +91,7 @@ resource "aws_internet_gateway" "main" {
 }
 
 resource "aws_eip" "nat" {
-  domain = true
+  domain = "vpc"
 
   tags = {
     Name    = "${var.project_name}-nat-eip"
@@ -198,7 +198,7 @@ resource "aws_iam_role" "app_server_ssm" {
       {
         Effect = "Allow"
         Principal = {
-          EC2 = "ec2.amazonaws.com"
+          Service = "ec2.amazonaws.com"
         }
         Action = "sts:AssumeRole"
       }
@@ -290,7 +290,8 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu" {
 }
 
 resource "aws_cloudwatch_log_group" "nginx" {
-  name = "/${var.project_name}/nginx/access"
+  name              = "/${var.project_name}/nginx/access"
+  retention_in_days = 30
 
   tags = {
     Name    = "${var.project_name}-nginx-logs"
