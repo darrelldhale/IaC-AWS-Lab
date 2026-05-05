@@ -80,11 +80,19 @@
 
 ---
 
-## Month 3 — Infrastructure as Code (Planned)
-- Terraform remote state, modules, workspaces
-- CloudFormation as backup skill
-- SSM at scale
-- Tagging strategies and cost accountability
+## Month 3 — Infrastructure as Code
+
+### Week 1 — Remote State + Infrastructure Rebuild ✅
+- [x] Created S3 bucket for Terraform remote state with versioning and public access blocked
+- [x] Created DynamoDB table for state locking
+- [x] Consolidated Month 2 week-2 and week-3 configs into a single Terraform root
+- [x] Wired S3 backend — state lives at month-3/week-1/terraform.tfstate
+- [x] Rebuilt full infrastructure: VPC, subnets, IGW, NAT Gateway, EC2, SSM, CloudWatch, SNS
+- [x] Verified nginx serving HTTP 200 via SSM session
+- [x] Verified SSM agent and CloudWatch agent installed via user_data
+- [x] Centralized Month 1 bash scripts into repo-level scripts/ directory
+- [x] Wrote full repo README.md with month summaries and key decisions
+- [x] Learned: remote state, state locking, bootstrap problem, consolidated roots
 
 ---
 
