@@ -33,7 +33,7 @@ module "compute" {
   vpc_id              = module.networking.vpc_id
   private_subnet_1_id = module.networking.private_subnet_1_id
   ami_id              = var.ami_id
-  instance_type       = var.instance_type
+  instance_type       = terraform.workspace == "prod" ? "t3.small" : "t2.micro"
 }
 
 module "observability" {
@@ -42,5 +42,5 @@ module "observability" {
   aws_region         = var.aws_region
   instance_id        = module.compute.instance_id
   alert_email        = var.alert_email
-  log_retention_days = var.log_retention_days
+  log_retention_days = terraform.workspace == "prod" ? 30 : 7
 }
