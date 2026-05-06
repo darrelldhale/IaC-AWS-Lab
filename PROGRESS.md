@@ -81,6 +81,10 @@
 ---
 
 ## Month 3 — Infrastructure as Code
+Week 1 — Remote state + rebuild infra        ✅ Done
+Week 2 — Terraform modules + workspaces
+Week 3 — CloudFormation
+Week 4 — SSM at scale + Tagging strategies
 
 ### Week 1 — Remote State + Infrastructure Rebuild ✅
 - [x] Created S3 bucket for Terraform remote state with versioning and public access blocked
