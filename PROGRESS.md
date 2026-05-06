@@ -122,7 +122,18 @@ Week 4 — SSM at scale + Tagging strategies
 - [x] Enabled AWS CLI auto-complete in WSL
 - [x] Learned: CloudFormation vs Terraform tradeoffs, when each is used in production
 
-
+### Week 4 — SSM at Scale + Tagging Strategies ✅
+- [x] Built SSM Document — SRELab-HealthCheck with 4 steps: service, disk, memory, failed services
+- [x] Registered document with AWS via aws ssm create-document
+- [x] Ran document against EC2 instance via aws ssm send-command
+- [x] Verified health check output — nginx running, disk 24%, memory healthy, no failed services
+- [x] Demonstrated SSM fleet targeting by tag in AWS Console
+- [x] Defined six-tag schema: Name, Project, Environment, Owner, ManagedBy, CostCenter
+- [x] Built tagging-strategy.md documenting the schema and rationale
+- [x] Added locals block to all three modules with merge pattern
+- [x] Applied tags to all 17 resources via terraform apply
+- [x] Verified Environment tag enables SSM fleet targeting — 1 target, 1 completed, 0 errors
+- [x] Learned: SSM Documents vs interactive sessions, tag-based targeting, merge pattern in Terraform
 
 ---
 
