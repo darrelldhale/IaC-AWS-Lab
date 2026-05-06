@@ -110,6 +110,19 @@ Week 4 — SSM at scale + Tagging strategies
 - [x] Verified ternary expressions drive correct values per workspace
 - [x] Learned: modules, data flow between modules, workspaces, ternary expressions
 
+### Week 3 — CloudFormation ✅
+- [x] Learned CloudFormation vocabulary: stacks, parameters, resources, outputs
+- [x] Mapped CloudFormation concepts to Terraform equivalents
+- [x] Learned CloudFormation intrinsic functions: !Sub, !Ref
+- [x] Built a CloudFormation template with SNS topic, email subscription, and CloudWatch alarms
+- [x] Deployed stack with aws cloudformation deploy
+- [x] Updated stack by adding a second alarm — CloudFormation diffed and added only the new resource
+- [x] Deleted stack with aws cloudformation delete-stack
+- [x] Verified stack resources and outputs with describe-stacks and list-stack-resources
+- [x] Enabled AWS CLI auto-complete in WSL
+- [x] Learned: CloudFormation vs Terraform tradeoffs, when each is used in production
+
+
 
 ---
 
