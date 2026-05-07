@@ -17,6 +17,7 @@ Build the skills and portfolio through real tools, real infrastructure, and real
 - Source Control: GitHub
 
 ## Repo Structure
+```
 sre-lite-lab/
 ├── README.md
 ├── PROGRESS.md                  # Week-by-week progress tracker
@@ -36,7 +37,7 @@ sre-lite-lab/
 ├── month-6-chaos/               # Incident response, FIS, DR testing
 ├── month-7-security/            # GuardDuty, Secrets Manager, FinOps
 └── month-8-capstone/            # Production-grade system, full IaC, CI/CD
-
+```
 ## Month Summaries
 
 ### Month 1 — SRE Foundations ✅
