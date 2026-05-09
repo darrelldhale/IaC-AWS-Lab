@@ -90,3 +90,4 @@ and SRE portfolio document.
   and rebuilt when needed.
 - **Scripts centralized** — Bash scripts built in Month 1 live in `scripts/`
   at the repo root for reuse across months.
+  **CloudWatch Dimensions Lesson** - No CloudWatch alarms were being received. Tracked down the bug, diagnosed it. The dimensions block had tags in it instead of the instance ID. That's why the alarm never evaluated — it was never pointed at an actual EC2 instance.

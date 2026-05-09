@@ -172,6 +172,26 @@ Week 4 — SSM at scale + Tagging strategies
 - [x] Learned: Docker vs ECS vs EKS — packaging vs orchestration vs scale
 
 
+### Week 3 — ECS Fargate
+- [x] Built self-contained Week 3 Terraform root — networking module reused, compute module rebuilt for ECS
+- [x] Created ECR repository with scan on push enabled
+- [x] Built ECS compute module: Security Groups, IAM execution and task roles, ECS Exec policy
+- [x] Built ALB, Target Group (target_type=ip), and Listener for Fargate
+- [x] Built CloudWatch Log Group for container logs with 7 day retention
+- [x] Built ECS Cluster with Container Insights enabled
+- [x] Built ECS Task Definition — Fargate launch type, awsvpc network mode
+- [x] Built ECS Service — desired count 2, rolling deployment, ECS Exec enabled
+- [x] Authenticated Docker to ECR and pushed custom nginx image
+- [x] Deployed custom image to Fargate — two healthy tasks across two AZs
+- [x] Performed rolling deployment — observed task drain/register cycle live
+- [x] Verified runningCount == desiredCount as primary health indicator
+- [x] Learned: ECR, ECS cluster, task definition, ECS service, task vs execution role
+- [x] Learned: target_type=ip for Fargate, rolling deployments, task definition revisions
+
+
+
+
+
 ---
 
 ## Month 5 — Observability
