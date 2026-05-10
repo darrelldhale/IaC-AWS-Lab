@@ -188,7 +188,31 @@ Week 4 — SSM at scale + Tagging strategies
 - [x] Learned: ECR, ECS cluster, task definition, ECS service, task vs execution role
 - [x] Learned: target_type=ip for Fargate, rolling deployments, task definition revisions
 
+In summary, here is what I accomplished this week:
 
+-Created a custom HTML page and wrote a Dockerfile to package it with nginx
+-Built a Docker image from the Dockerfile — containerized the app
+-Tagged the image — once for local use, once with the ECR URL for pushing
+-Pushed the image to ECR — AWS's private container registry
+-Deployed via Terraform — ECS pulled the image from ECR and ran it as Fargate tasks
+-Verified via ALB DNS — traffic flowing through the load balancer to the containers
+
+### Week 4 — Blue/Green Deployments
+- [x] Built Week 4 Terraform root — networking reused, compute module rebuilt for blue/green
+- [x] Added second ALB target group (green) alongside existing blue target group
+- [x] Added test listener on port 8080 — allows testing green before traffic shift
+- [x] Changed ECS service deployment controller from ECS to CODE_DEPLOY
+- [x] Added lifecycle ignore_changes on ECS service — prevents Terraform fighting CodeDeploy
+- [x] Built CodeDeploy IAM role with AWSCodeDeployRoleForECS policy
+- [x] Built CodeDeploy application and deployment group
+- [x] Configured CodeDeployDefault.ECSAllAtOnce — 100% traffic shift, no gradual rollout
+- [x] Configured auto rollback on deployment failure
+- [x] Built and pushed v4 image to ECR
+- [x] Triggered blue/green deployment via aws deploy create-deployment
+- [x] Verified v4 on port 8080 (green) before traffic shift completed
+- [x] Verified port 80 serving v4 after traffic shift — zero inconsistency window
+- [x] Read deployment logs — confirmed all-at-once swap vs rolling drain pattern
+- [x] Learned: blue/green vs rolling, CodeDeploy application/deployment group, deployment controller types, lifecycle ignore_changes
 
 
 
