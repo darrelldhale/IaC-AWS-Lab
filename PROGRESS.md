@@ -215,11 +215,10 @@ In summary, here is what I accomplished this week:
 - [x] Learned: blue/green vs rolling, CodeDeploy application/deployment group, deployment controller types, lifecycle ignore_changes
 
 
-
 ---
 
 ## Month 5 — Observability
-- CloudWatch the right way: structured logging, X-Ray tracing
+- CloudWatch the right way: structured logging
 - Real on-call dashboard
 - SLIs, SLOs, error budgets
 - Synthetic monitoring and canaries

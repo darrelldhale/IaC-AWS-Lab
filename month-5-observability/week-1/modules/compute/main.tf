@@ -3,6 +3,7 @@
 # ECR is AWS's Docker container registry service.
 resource "aws_ecr_repository" "ecr_repo" {
   name = "${var.project}-${var.environment}-ecr-repo"
+  force_delete = true
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
