@@ -1,6 +1,6 @@
 # SRE Lite Lab — Northwind Health Group
 
-## The Scenario
+## The Plan
 
 Northwind Health Group is a mid-sized healthcare organization modernizing
 their on-premises infrastructure by migrating to AWS. As their infrastructure and reliability engineer, the mandate was clear:
