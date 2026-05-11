@@ -1,0 +1,10 @@
+{
+  "applicationName": "sre-lab-dev-codedeploy-app",
+  "deploymentGroupName": "sre-lab-dev-codedeploy-deployment-group",
+  "revision": {
+    "revisionType": "AppSpecContent",
+    "appSpecContent": {
+      "content": "{\"version\":0.0,\"Resources\":[{\"TargetService\":{\"Type\":\"AWS::ECS::Service\",\"Properties\":{\"TaskDefinition\":\"arn:aws:ecs:us-east-1:425924867120:task-definition/sre-lab-dev-ecs-task:7\",\"LoadBalancerInfo\":{\"ContainerName\":\"sre-lab-dev-ecs-container\",\"ContainerPort\":80}}}}]}"
+    }
+  }
+}

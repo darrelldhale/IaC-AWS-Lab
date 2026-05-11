@@ -215,14 +215,30 @@ In summary, here is what I accomplished this week:
 - [x] Learned: blue/green vs rolling, CodeDeploy application/deployment group, deployment controller types, lifecycle ignore_changes
 
 
-
 ---
 
 ## Month 5 — Observability
-- CloudWatch the right way: structured logging, X-Ray tracing
+- CloudWatch the right way: structured logging
 - Real on-call dashboard
 - SLIs, SLOs, error budgets
 - Synthetic monitoring and canaries
+
+### Week 1 — Structured Logging + Metric Filters
+- [x] Switched nginx from plain-text to JSON structured logging via custom nginx.conf
+- [x] Built and pushed v5 image with JSON logging baked in
+- [x] Created month-5-observability/week-1 as self-contained Terraform root
+- [x] Built observability module: metric filters and CloudWatch alarm
+- [x] Metric filter: Http5xxCount — counts every 5xx response from JSON status field
+- [x] Metric filter: Http4xxCount — counts every 4xx response from JSON status field
+- [x] Metric filter: HttpRequestCount — counts every request regardless of status
+- [x] CloudWatch alarm: sre-lab-dev-http-5xx-too-high — fires above 5 errors in 60 seconds
+- [x] Added ecs_log_group_name output to compute module — feeds into observability module
+- [x] Deployed v5 via CodeDeploy blue/green — Northwind Health Group Patient Portal
+- [x] Verified JSON logs arriving in CloudWatch Logs Insights
+- [x] Verified metric filters producing data points in SRELab/Nginx namespace
+- [x] Learned: structured logging, metric filters, Logs Insights queries, log-to-metric pipeline
+
+
 
 ---
 
