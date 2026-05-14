@@ -12,3 +12,9 @@ crash.log
 *.pem
 *.key
 *.tar.gz
+
+# Terraform environment values - never commit real values
+terraform.tfvars
+
+# Zip file for Lambda
+canary.zip

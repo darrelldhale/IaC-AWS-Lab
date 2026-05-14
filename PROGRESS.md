@@ -262,6 +262,18 @@ In summary, here is what I accomplished this week:
 - [ ] Added burn rate alarm using metric_query blocks — fires when burn rate exceeds 14.4x
 - [ ] Learned: SLIs, SLOs, error budgets, burn rate math, metric math alarms vs single-metric alarms, (known after apply) in Terraform plan diffs
 
+
+### Week 4 — Synthetic Monitoring and Canaries
+- [x] Introduced terraform.tfvars — separated environment values from variable definitions
+- [x] Added terraform.tfvars.example as committed reference — real values gitignored
+- [x] Added archive provider to root — zips canary script at plan time
+- [x] Created canary.js.tftpl — Node.js script that hits ALB and verifies 200 response
+- [x] Built S3 bucket for canary artifacts — screenshots and logs stored after every run
+- [x] Built IAM role and policy for canary — S3 write, CloudWatch metrics, log access
+- [x] Deployed CloudWatch Synthetics canary — runs every minute, start_canary = true
+- [x] Added canary failed alarm — fires on 2 consecutive failures, treat_missing_data = breaching
+- [x] Added canary alarm to dashboard Row 1 — all 5 alarms visible in one panel
+- [x] Learned: synthetic vs reactive monitoring, templatefile, archive provider, path.module, zip_file path vs filebase64, terraform import for state drift, terraform.tfvars pattern
 ---
 
 ## Month 6 — Incident Management & Chaos Engineering
