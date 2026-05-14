@@ -283,6 +283,21 @@ In summary, here is what I accomplished this week:
 - On-call simulation exercises
 - Backup/restore and DR testing
 
+### Week 1 — Incident Response Playbook
+- [x] Created month-6-incident-chaos-engineering/week-1 — copied Week 4 infra files as baseline
+- [x] Cut month-6-week-1 branch
+- [x] Built references/incident-response-playbook.md — full Northwind playbook
+- [x] Defined P1/P2/P3/P4 severity levels mapped to all 5 CloudWatch alarms
+- [x] Defined 5-phase incident lifecycle: Detect, Declare, Respond, Resolve, Review
+- [x] Defined IC, Technical Lead, and Communications Lead roles with severity matrix
+- [x] Wrote alarm-specific first-response checklists for all 5 alarms
+- [x] Wrote communication templates: initial notification, status update, resolution
+- [x] Learned: playbook vs runbook distinction, severity classification, incident lifecycle
+
+### Week 2 — AWS Fault Injection Simulator (FIS)
+### Week 3 — Runnable Runbooks
+### Week 4 — On-call Simulation, Backup/Restore + DR Testing
+
 ---
 
 ## Month 7 — Security, Networking & Cost
