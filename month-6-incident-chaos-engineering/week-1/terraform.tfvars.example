@@ -1,0 +1,8 @@
+# Copy this file to terraform.tfvars and fill in real values
+# terraform.tfvars is gitignored — never commit real values
+
+aws_region      = "us-east-1"
+project         = "sre-lab"
+environment     = "dev"
+container_image = "YOUR_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/sre-lab-dev-ecr-repo:TAG"
+alert_email     = "your-oncall-email@example.com"

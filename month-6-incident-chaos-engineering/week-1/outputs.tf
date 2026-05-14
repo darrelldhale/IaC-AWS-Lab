@@ -19,6 +19,13 @@ output "ecs_cluster_name" {
   value       = module.compute.ecs_cluster_name
 }
 
+# === Output: ECR Repository URL ==
+# Used to push custom Docker image to AWS after apply.
+output "ecr_repository_url" {
+  description = "URL of the ECR repository"
+  value       = module.compute.ecr_repository_url
+}
+
 # === Output: CodeDeploy Application Name ===
 # Needed when triggering deployments via CLI.
 output "codedeploy_app_name" {

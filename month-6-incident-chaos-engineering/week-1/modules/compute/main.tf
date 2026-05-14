@@ -1,3 +1,17 @@
+# === ECR Repository ===
+# Problem: ECS needs somewhere private to pull container images from.
+# ECR is AWS's Docker container registry service.
+resource "aws_ecr_repository" "ecr_repo" {
+  name = "${var.project}-${var.environment}-ecr-repo"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+
+  tags = merge(var.tags, { Name = "${var.project}-${var.environment}-ecr-repo" })
+}
+
 # === Security Group: ApplicationLoad Balancer ===
 # Problem: Control what traffic can reach the ALB.
 # Only port 80 from the internet allowed in.
