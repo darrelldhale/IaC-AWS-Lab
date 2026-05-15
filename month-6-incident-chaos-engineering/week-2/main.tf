@@ -89,3 +89,92 @@ module "observability" {
   # ALB DNS name - passed to the canary as its target URL
   alb_dns_name = module.compute.alb_dns_name
 }
+
+# ====== FIS: Chaos Engineering =========================================
+
+# The trust policy allows the FIS service itself to assume it
+data "aws_iam_policy_document" "fis_assume" {
+  statement {
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["fis.amazonaws.com"]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+# IAM Role: FIS runs experiments as this role
+resource "aws_iam_role" "fis_role" {
+  name               = "${var.project}-${var.environment}-fis-role"
+  assume_role_policy = data.aws_iam_policy_document.fis_assume.json
+
+  tags = local.tags
+}
+
+# IAM Policy: minimum permissions FIS needs to run this experiment
+# StopTask - to inject the failure
+# DescribeTasks/ListTasks - to find and target the right tasks
+# DescribeAlarms - to evaluate the stop condition during the run
+data "aws_iam_policy_document" "fis_permissions" {
+  statement {
+    actions = [
+      "ecs:StopTask",
+      "ecs:DescribeTasks",
+      "ecs:ListTasks",
+    ]
+
+    resources = ["*"]
+  }
+  statement {
+    actions   = ["cloudwatch:DescribeAlarms"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "fis_policy" {
+  name   = "${var.project}-${var.environment}-fis-policy"
+  role   = aws_iam_role.fis_role.id
+  policy = data.aws_iam_policy_document.fis_permissions.json
+}
+
+# FIS Experiment Template: stop one ECS task and observe recovery
+# This verifies that ECS self-healing works and alarms fir as expected
+resource "aws_fis_experiment_template" "ecs_task_stop" {
+  description = "Stop one Fargate task - verify ECS replaces it and alarms fire and recover"
+  role_arn    = aws_iam_role.fis_role.arn
+
+  # Stop condition: if the SLO burn rate alarm fires during the experiment,
+  # FIS aborts immediately - prevents the chaos run from consuming the error budget
+  stop_condition {
+    source = "aws:cloudwatch:alarm"
+    value  = module.observability.burn_rate_alarm_arn
+  }
+
+  # Target: exactly one ECS task running in the Northwind cluster
+  # COUNT(1) means FIS picks one task at random to stop
+  target {
+    name           = "northwind-ecs-tasks"
+    resource_type  = "aws:ecs:task"
+    selection_mode = "COUNT(2)"
+
+    resource_tag {
+      key   = "Project"
+      value = var.project
+    }
+  }
+
+  # Action: stop the selected task
+  # ECS detects the missing task and launches a replacement automatically
+  # This is the self-healing behavior we're testing
+  action {
+    name      = "stop-one-ecs-task"
+    action_id = "aws:ecs:stop-task"
+    target {
+      key   = "Tasks"
+      value = "northwind-ecs-tasks"
+    }
+  }
+
+  tags = local.tags
+}

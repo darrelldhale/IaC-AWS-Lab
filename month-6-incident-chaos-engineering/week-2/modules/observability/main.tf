@@ -1,3 +1,4 @@
+# Local Tags
 locals {
   name_prefix = "${var.project}-${var.environment}"
 

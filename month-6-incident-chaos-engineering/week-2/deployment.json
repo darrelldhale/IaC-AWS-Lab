@@ -4,7 +4,7 @@
   "revision": {
     "revisionType": "AppSpecContent",
     "appSpecContent": {
-      "content": "{\"version\":0.0,\"Resources\":[{\"TargetService\":{\"Type\":\"AWS::ECS::Service\",\"Properties\":{\"TaskDefinition\":\"arn:aws:ecs:us-east-1:425924867120:task-definition/sre-lab-dev-ecs-task:15\",\"LoadBalancerInfo\":{\"ContainerName\":\"sre-lab-dev-ecs-container\",\"ContainerPort\":80}}}}]}"
+      "content": "{\"version\":0.0,\"Resources\":[{\"TargetService\":{\"Type\":\"AWS::ECS::Service\",\"Properties\":{\"TaskDefinition\":\"arn:aws:ecs:us-east-1:425924867120:task-definition/sre-lab-dev-ecs-task:19\",\"LoadBalancerInfo\":{\"ContainerName\":\"sre-lab-dev-ecs-container\",\"ContainerPort\":80}}}}]}"
     }
   },
   "autoRollbackConfiguration": {

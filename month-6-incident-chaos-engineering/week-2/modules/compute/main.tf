@@ -314,6 +314,7 @@ resource "aws_ecs_service" "ecs_service" {
   desired_count = var.desired_count
   launch_type = "FARGATE"
   enable_execute_command = true
+  propagate_tags         = "SERVICE"
 
   deployment_controller {
     type = "CODE_DEPLOY"

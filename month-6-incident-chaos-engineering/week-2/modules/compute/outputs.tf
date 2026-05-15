@@ -39,3 +39,10 @@ output "ecs_log_group_name" {
   description = "name of the ECS CloudWatch log group"
   value = aws_cloudwatch_log_group.ecs_log_group.name
 }
+
+# === Output: ECS Cluster ARN ===
+# Used by FIS experiment template to target tasks running in this cluster.
+output "ecs_cluster_arn" {
+  description = "ARN of the ECS cluster"
+  value       = aws_ecs_cluster.ecs_cluster.arn
+}
