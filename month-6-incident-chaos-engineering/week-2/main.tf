@@ -14,7 +14,7 @@ terraform {
   # S3 Bucket To Hold State Files
   backend "s3" {
     bucket         = "sre-lab-tfstate-425924867120"
-    key            = "month-5/week-4/terraform.tfstate"
+    key            = "month-6/week-2/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "sre-lab-tfstate-lock"
     encrypt        = true

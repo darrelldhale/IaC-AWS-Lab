@@ -258,7 +258,7 @@ The error budget is being consumed at more than 14.4 times the sustainable rate.
 
 **Most likely causes:**
 1. A spike in 5xx errors caused by a bad deployment or upstream dependency
-2. ECS tasks under extreme ressource pressure producing intermittent errors
+2. ECS tasks under extreme resource pressure producing intermittent errors
 3. A small number of endpoints consistently returning 500s
 4. Scanner or bot traffic generating errors at high volume
 
@@ -322,7 +322,7 @@ Average CPU across all ECS tasks has exceeded 80% for two consecutive minutes. T
 - [ ] Check for a recent deployment - did CPU spike after a push?
 - [ ] Check ECS task logs - is any single request type consuming excessive time?
 - [ ] If traffic spike: consider manually increasing ECS desired task count
-- [ ] If runaway process: identify th task and force a task replacement
+- [ ] If runaway process: identify the task and force a task replacement
 
 **Escalate if:**
 CPU remains above 80% for more than 15 minutes, or 5xx errors begin appearing alongside the CPU pressure.
@@ -354,13 +354,21 @@ Tasks begin restarting and 5xx errors appear, or memory remains above 80% for mo
 
 ---
 
-### Initial Incident Notification
+## Section 5 — Communication Templates
 
-Use this template when declaring a P1 or P2 incident. Send within 15 minutes of declaration.
+Use these templates exactly as written. Fill in the bracketed fields only.
+Do not rewrite or improvise during an active incident.
 
 ---
 
-**Subject:** [P1/P2] Northwind Patient Portal - Incident Declared
+### Initial Incident Notification
+
+Use this template when declaring a P1 or P2 incident. Send within 15 minutes
+of declaration.
+
+---
+
+**Subject:** [P1/P2] Northwind Patient Portal — Incident Declared
 
 **Body:**
 
@@ -368,17 +376,14 @@ Incident declared at [TIME] UTC.
 
 **Severity:** [P1 / P2]
 **Status:** Investigating
-**Impact:** [One sentence - what patients are experiencing right now]
+**Impact:** [One sentence — what patients are experiencing right now]
 **Alarms firing:** [List alarm names from the dashboard]
 
-Our on-call engineer is actively investigating. The next update will be sent in 15 minutes.
+Our on-call engineer is actively investigating. The next update will be sent
+in 15 minutes.
 
 **Incident Commander:** [Name]
 **Technical Lead:** [Name]
-
----
-
-### Status Update (every 15 min for P1, every 30 min for P2)
 
 ---
 
@@ -395,7 +400,7 @@ Update as of [TIME] UTC.
 **Severity:** [P1 / P2]
 **Status:** [Investigating / Root cause identified / Fix in progress]
 **Current findings:** [One or two sentences — what has been confirmed so far]
-**Next update:** [TIME]
+**Next update:** [TIME] UTC
 
 ---
 
