@@ -215,6 +215,7 @@ resource "aws_s3_bucket_public_access_block" "canary_results" {
   restrict_public_buckets = true
 }
 
+# IAM role: the canary Lambda function runs as this role
 # The assume role policy tells AWS that Lambda is allowed to use it
 data "aws_iam_policy_document" "canary_assume" {
   statement {
@@ -227,7 +228,6 @@ data "aws_iam_policy_document" "canary_assume" {
   }
 }
 
-# IAM role: the canary Lambda function runs as this role
 resource "aws_iam_role" "canary_role" {
   name = "${local.name_prefix}-canary-role"
   assume_role_policy = data.aws_iam_policy_document.canary_assume.json

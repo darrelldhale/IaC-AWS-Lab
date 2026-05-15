@@ -1,0 +1,24 @@
+// CloudWatch Synthetics canary - Patient Portal Health Check
+// Runs every minute and verifies the ALB returns a 200 response
+// Failures publish to CloudWatch under the CloudWatchSynthetics namespace
+
+const synthetics = require('Synthetics');
+
+exports.handler = async () => {
+  const url = 'http://${alb_dns_name}/';
+
+  // executeHttpStep makes the request and fails the canary if it gets a non-2xx response
+  await synthetics.executeHttpStep(
+    'Patient Portal — homepage returns 200',
+    url,
+    undefined,
+    {
+      includeRequestHeaders: false,
+      includeResponseHeaders: false,
+      restrictedHeaders:     [],
+      includeRequestBody:    false,
+      includeResponseBody:   false
+    }
+  );
+};
+

@@ -44,7 +44,7 @@ The portal is reachable but patients are experiencing errors, or resource pressu
 
 **Triggered by:**
 - `sre-lab-dev-http-5xx-too-high` - more than 5 server errors in 60 seconds;
-a subset pf patient requests are failing
+a subset of patient requests are failing
 - `sre-lab-dev-ecs-cpu-too-high` - ECS task CPU above 80% for 2 consecutive minutes; sustained pressure causes request slowdowns and eventual task crashes
 - `sre-lab-dev-ecs-memory-too-high` - ECS task memory above 80% for 2 consecutive minutes; memory exhaustion causes ECS to kill and restart tasks, visible to patients as 5xx errors
 
