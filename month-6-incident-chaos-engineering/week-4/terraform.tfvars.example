@@ -4,5 +4,6 @@
 aws_region      = "us-east-1"
 project         = "sre-lab"
 environment     = "dev"
+# Last known good image: <previous version tag> — update this every time a deployment is verified healthy
 container_image = "YOUR_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/sre-lab-dev-ecr-repo:TAG"
 alert_email     = "your-oncall-email@example.com"
