@@ -311,6 +311,15 @@ In summary, here is what I accomplished this week:
 - [x] Learned: chaos via bad deployment is more reliable than FIS task-stop for fast-recovering Fargate services
 
 ### Week 3 — Runnable Runbooks
+- [x] Created scripts/runbooks/ directory with shared config.sh — centralizes all resource names and region
+- [x] Built triage.sh — checks all 5 alarms in one command, routes to correct runbook
+- [x] Built investigate-5xx.sh — alarm state, log query, ECS health, last CodeDeploy deployment, rollback guidance
+- [x] Built investigate-cpu.sh — alarm state, CPU metrics, ECS health, recent service events, grep-ready log command
+- [x] Built investigate-memory.sh — alarm state, memory metrics, ECS health, service events, memory leak warning
+- [x] Built investigate-burn-rate.sh — alarm state, 5xx count, request count, dashboard link for SLI math
+- [x] Built investigate-canary.sh — alarm state, direct curl test, ECS health, S3 FAILED grep command
+- [x] Learned: runnable vs documentary runbooks, scripts complement not replace the First Responder Checklist, variables resolve at print time for copy-paste readiness, -z flag for empty string checks, FAILED grep pattern for S3 canary artifacts
+
 ### Week 4 — On-call Simulation, Backup/Restore + DR Testing
 
 ---
