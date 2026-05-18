@@ -341,8 +341,6 @@ In summary, here is what I accomplished this week:
 ## Month 7 — Security, Networking & Cost
 - AWS Security Hub, GuardDuty, Config
 - VPC Flow Logs
-- Secrets Manager and Parameter Store
-- FinOps: Cost Explorer, Budgets, rightsizing
 
 ### Week 1 — AWS Security Hub, GuardDuty, and Config
 - [x] Enabled GuardDuty detector — monitors CloudTrail, VPC Flow Logs, and DNS logs for threats
@@ -355,6 +353,21 @@ In summary, here is what I accomplished this week:
 - [x] Subscribed to AWS Foundational Security Best Practices standard
 - [x] Reviewed real Security Hub findings — MFA, CloudTrail, and encryption gaps surfaced
 - [x] Learned: GuardDuty vs Config vs Security Hub roles, terraform untaint, bucket policies for AWS services, inline vs managed IAM policies
+
+
+### Week 2 — VPC Flow Logs
+- [x] Added CloudWatch Log Group to networking module — 30-day retention for HIPAA compliance
+- [x] Added IAM role and inline policy to networking module — grants VPC Flow Logs service write access to CloudWatch
+- [x] Added VPC Flow Log resource — captures ALL traffic (ACCEPT and REJECT) across the VPC
+- [x] Added flow_log_group_name output to networking module — feeds into observability module
+- [x] Added flow_log_group_name variable to observability module
+- [x] Added VpcRejectCount metric filter — space-delimited pattern matching REJECT records
+- [x] Added vpc-reject-too-high alarm — fires on 100+ rejected connections in 5 minutes
+- [x] Added REJECT alarm to dashboard Row 1 — 6 alarms now visible in single panel
+- [x] Wired flow_log_group_name from networking → root → observability
+- [x] Alarm fired immediately on deploy — 105 real rejected connections detected
+- [x] Queried flow logs with Logs Insights — identified Telnet scanners, proxy hunters, mail relay probes
+- [x] Learned: VPC flow log format (space-delimited vs JSON), REJECT as security signal, flow logs as HIPAA audit evidence
 ---
 
 ## Month 8 — Capstone

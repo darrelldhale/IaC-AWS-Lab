@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Northwind Health Group — Patient Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #0d2b45;
+      --teal:   #0e7490;
+      --teal-l: #cffafe;
+      --slate:  #475569;
+      --muted:  #94a3b8;
+      --border: #e2e8f0;
+      --bg:     #f8fafc;
+      --white:  #ffffff;
+      --green:  #16a34a;
+      --amber:  #d97706;
+      --red:    #dc2626;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--navy);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      background: var(--teal);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-mark svg { width: 20px; height: 20px; fill: white; }
+
+    .logo-text {
+      font-family: 'DM Serif Display', serif;
+      color: white;
+      font-size: 18px;
+      letter-spacing: 0.01em;
+    }
+
+    .logo-text span {
+      color: #7dd3fc;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: block;
+      margin-top: -2px;
+    }
+
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .meta-chip {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.6);
+    }
+
+    .meta-chip.env { color: #6ee7b7; border-color: #6ee7b7; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 32px 32px; }
+
+    /* ── PAGE TITLE ── */
+    .page-header {
+      margin-bottom: 28px;
+    }
+
+    .page-header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .page-header p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* ── STATS ROW ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .stat-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── SEARCH / FILTER BAR ── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 9px 12px 9px 36px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: #1e293b;
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .search-wrap input:focus { border-color: var(--teal); }
+
+    .filter-btn {
+      padding: 9px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--slate);
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .filter-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .filter-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    thead {
+      background: #f1f5f9;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      padding: 11px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--slate);
+    }
+
+    td { padding: 13px 16px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tbody tr { transition: background 0.1s; }
+    tbody tr:hover { background: #f8fafc; }
+
+    .patient-id {
+      font-family: 'DM Sans', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .patient-name { font-weight: 500; color: #1e293b; }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    .name-cell { display: flex; align-items: center; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-active  { background: #dcfce7; color: #15803d; }
+    .badge-pending { background: #fef9c3; color: #a16207; }
+    .badge-review  { background: #fee2e2; color: #b91c1c; }
+    .badge-stable  { background: #e0f2fe; color: #0369a1; }
+
+    .dept {
+      font-size: 12px;
+      color: var(--slate);
+    }
+
+    .appt {
+      font-size: 13px;
+      color: #334155;
+    }
+
+    .appt-time {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .action-btn {
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--teal);
+      background: transparent;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.15s;
+    }
+
+    .action-btn:hover { background: var(--teal); color: white; border-color: var(--teal); }
+
+    /* ── FOOTER META ── */
+    .footer-meta {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+      padding: 0 4px;
+    }
+
+    .footer-meta .version { font-weight: 500; color: var(--slate); }
+
+    .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #22c55e; margin-right: 6px; vertical-align: middle; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/><path d="M11 6h2v2h-2zm0 10h2v2h-2z" opacity=".4"/><path d="M13 8h-2v2h-1v4h1v2h2v-2h1v-4h-1z"/></svg>
+    </div>
+    <div class="logo-text">
+      Northwind Health Group
+      <span>Patient Portal</span>
+    </div>
+  </div>
+  <div class="header-meta">
+    <span class="meta-chip">Version 9.0</span>
+    <span class="meta-chip env">&#x25CF; Dev</span>
+    <span class="meta-chip" id="hostname-chip">Loading...</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="page-header">
+    <h1>Patient Registry</h1>
+    <p>Active patient accounts — Northwind Health Group primary care network</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Total Patients</div>
+      <div class="stat-value">20</div>
+      <div class="stat-sub">Registered accounts</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Active</div>
+      <div class="stat-value" style="color:var(--green)">14</div>
+      <div class="stat-sub">In good standing</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Pending Review</div>
+      <div class="stat-value" style="color:var(--amber)">4</div>
+      <div class="stat-sub">Awaiting assessment</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Urgent</div>
+      <div class="stat-value" style="color:var(--red)">2</div>
+      <div class="stat-sub">Requires attention</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" placeholder="Search patients by name or ID…" id="search-input" oninput="filterTable()">
+    </div>
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('Active', this)">Active</button>
+    <button class="filter-btn" onclick="setFilter('Pending', this)">Pending</button>
+    <button class="filter-btn" onclick="setFilter('Urgent', this)">Urgent</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Patient ID</th>
+          <th>Name</th>
+          <th>DOB</th>
+          <th>Department</th>
+          <th>Next Appointment</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="patient-table">
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer-meta">
+    <div><span class="dot"></span>System operational &mdash; Blue/Green deployment active</div>
+    <div class="version">Hostname: <span id="hostname-footer">—</span> &nbsp;|&nbsp; v7.0</div>
+  </div>
+
+</div>
+
+<script>
+  const patients = [
+    { id: "NHG-100421", name: "Margaret Okonkwo",   initials: "MO", color: "#0e7490", dob: "03/14/1962", dept: "Cardiology",        appt: "May 19, 2026",  time: "9:00 AM",  status: "Active"   },
+    { id: "NHG-100587", name: "James Whitfield",    initials: "JW", color: "#7c3aed", dob: "11/02/1978", dept: "Primary Care",      appt: "May 21, 2026",  time: "10:30 AM", status: "Active"   },
+    { id: "NHG-100634", name: "Priya Nambiar",      initials: "PN", color: "#b45309", dob: "07/19/1989", dept: "Endocrinology",     appt: "May 22, 2026",  time: "2:15 PM",  status: "Pending"  },
+    { id: "NHG-100712", name: "DeShawn Carver",     initials: "DC", color: "#15803d", dob: "01/30/1955", dept: "Orthopedics",       appt: "May 20, 2026",  time: "8:00 AM",  status: "Urgent"   },
+    { id: "NHG-100803", name: "Elena Vasquez",      initials: "EV", color: "#be185d", dob: "05/08/1994", dept: "Neurology",         appt: "Jun 02, 2026",  time: "11:00 AM", status: "Active"   },
+    { id: "NHG-100915", name: "Thomas Huang",       initials: "TH", color: "#0369a1", dob: "09/23/1970", dept: "Gastroenterology",  appt: "May 28, 2026",  time: "3:45 PM",  status: "Active"   },
+    { id: "NHG-101024", name: "Fatima Al-Rashid",   initials: "FA", color: "#b45309", dob: "12/17/1983", dept: "Rheumatology",      appt: "Jun 05, 2026",  time: "9:30 AM",  status: "Pending"  },
+    { id: "NHG-101138", name: "Robert Kowalski",    initials: "RK", color: "#7c3aed", dob: "04/04/1948", dept: "Cardiology",        appt: "May 19, 2026",  time: "1:00 PM",  status: "Urgent"   },
+    { id: "NHG-101256", name: "Aisha Mensah",       initials: "AM", color: "#0e7490", dob: "08/29/1991", dept: "Dermatology",       appt: "Jun 10, 2026",  time: "10:00 AM", status: "Active"   },
+    { id: "NHG-101347", name: "Carlos Restrepo",    initials: "CR", color: "#15803d", dob: "02/11/1966", dept: "Pulmonology",       appt: "May 27, 2026",  time: "2:00 PM",  status: "Active"   },
+    { id: "NHG-101489", name: "Susan Olofsson",     initials: "SO", color: "#be185d", dob: "06/25/1959", dept: "Oncology",          appt: "May 23, 2026",  time: "8:30 AM",  status: "Pending"  },
+    { id: "NHG-101562", name: "Michael Abara",      initials: "MA", color: "#0369a1", dob: "10/14/1985", dept: "Primary Care",      appt: "Jun 03, 2026",  time: "4:00 PM",  status: "Active"   },
+    { id: "NHG-101673", name: "Yuki Tanaka",        initials: "YT", color: "#b45309", dob: "03/07/1997", dept: "Psychiatry",        appt: "May 30, 2026",  time: "11:30 AM", status: "Active"   },
+    { id: "NHG-101784", name: "Dorothy Pemberton",  initials: "DP", color: "#7c3aed", dob: "07/31/1942", dept: "Geriatrics",        appt: "May 20, 2026",  time: "9:15 AM",  status: "Active"   },
+    { id: "NHG-101895", name: "Kwame Asante",       initials: "KA", color: "#15803d", dob: "11/18/1979", dept: "Urology",           appt: "Jun 08, 2026",  time: "1:30 PM",  status: "Active"   },
+    { id: "NHG-101967", name: "Ingrid Sorensen",    initials: "IS", color: "#be185d", dob: "01/05/1973", dept: "Ophthalmology",     appt: "May 29, 2026",  time: "3:00 PM",  status: "Pending"  },
+    { id: "NHG-102043", name: "Raj Patel",          initials: "RP", color: "#0e7490", dob: "04/22/1988", dept: "Infectious Disease", appt: "Jun 01, 2026",  time: "10:45 AM", status: "Active"   },
+    { id: "NHG-102158", name: "Lucinda Ferreira",   initials: "LF", color: "#0369a1", dob: "08/09/1965", dept: "Nephrology",        appt: "May 26, 2026",  time: "2:30 PM",  status: "Active"   },
+    { id: "NHG-102267", name: "Omar Sharif",        initials: "OS", color: "#b45309", dob: "12/03/1952", dept: "Cardiology",        appt: "May 21, 2026",  time: "7:45 AM",  status: "Active"   },
+    { id: "NHG-102374", name: "Brianna Holloway",   initials: "BH", color: "#7c3aed", dob: "05/16/2001", dept: "Primary Care",      appt: "Jun 12, 2026",  time: "12:00 PM", status: "Active"   },
+  ];
+
+  const statusMap = {
+    "Active":  '<span class="badge badge-active">Active</span>',
+    "Pending": '<span class="badge badge-pending">Pending</span>',
+    "Urgent":  '<span class="badge badge-review">Urgent</span>',
+    "Stable":  '<span class="badge badge-stable">Stable</span>',
+  };
+
+  let activeFilter = 'all';
+
+  function renderTable(data) {
+    const tbody = document.getElementById('patient-table');
+    tbody.innerHTML = data.map(p => `
+      <tr data-status="${p.status}">
+        <td class="patient-id">${p.id}</td>
+        <td>
+          <div class="name-cell">
+            <div class="avatar" style="background:${p.color}22;color:${p.color}">${p.initials}</div>
+            <span class="patient-name">${p.name}</span>
+          </div>
+        </td>
+        <td style="color:#475569;font-size:13px">${p.dob}</td>
+        <td class="dept">${p.dept}</td>
+        <td>
+          <div class="appt">${p.appt}</div>
+          <div class="appt-time">${p.time}</div>
+        </td>
+        <td>${statusMap[p.status] || p.status}</td>
+        <td><button class="action-btn">View</button></td>
+      </tr>
+    `).join('');
+  }
+
+  function filterTable() {
+    const q = document.getElementById('search-input').value.toLowerCase();
+    const filtered = patients.filter(p => {
+      const matchSearch = p.name.toLowerCase().includes(q) || p.id.toLowerCase().includes(q);
+      const matchFilter = activeFilter === 'all' || p.status === activeFilter;
+      return matchSearch && matchFilter;
+    });
+    renderTable(filtered);
+  }
+
+  function setFilter(f, btn) {
+    activeFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filterTable();
+  }
+
+  // Show hostname dynamically from container
+  const hn = window.location.hostname || 'loaded dynamically from container';
+  document.getElementById('hostname-chip').textContent = hn;
+  document.getElementById('hostname-footer').textContent = hn;
+
+  renderTable(patients);
+</script>
+</body>
+</html>
