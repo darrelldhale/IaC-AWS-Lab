@@ -39,3 +39,82 @@ resource "aws_ecr_repository" "ecr_repo" {
     CostCenter  = "sre-lab"
   }
 }
+
+# Dedicated IAM user for the GitHub Actions pipeline
+# Persists between lab sessions — never destroyed
+resource "aws_iam_user" "pipeline_user" {
+  name          = "github-actions-pipeline"
+  force_destroy = true
+  tags = {
+    Project     = "sre-lab"
+    Environment = "dev"
+    ManagedBy   = "terraform"
+    Owner       = "darrell"
+    CostCenter  = "sre-lab"
+  }
+}
+
+# Least-privilege policy scoped to exactly what the pipeline needs
+resource "aws_iam_policy" "pipeline_policy" {
+  name        = "sre-lab-github-actions-pipeline-policy"
+  description = "Scoped permissions for the GitHub Actions CI/CD pipeline"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid      = "ECRAuth"
+        Effect   = "Allow"
+        Action   = ["ecr:GetAuthorizationToken"]
+        Resource = "*"
+      },
+      {
+        Sid    = "ECRPush"
+        Effect = "Allow"
+        Action = [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:PutImage",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload"
+        ]
+        Resource = "arn:aws:ecr:us-east-1:425924867120:repository/sre-lab-dev-ecr-repo"
+      },
+      {
+        Sid    = "ECSTaskDefinition"
+        Effect = "Allow"
+        Action = [
+          "ecs:DescribeTaskDefinition",
+          "ecs:RegisterTaskDefinition"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid      = "PassRole"
+        Effect   = "Allow"
+        Action   = ["iam:PassRole"]
+        Resource = "arn:aws:iam::425924867120:role/sre-lab-dev-*"
+      },
+      {
+        Sid    = "CodeDeploy"
+        Effect = "Allow"
+        Action = [
+          "codedeploy:CreateDeployment",
+          "codedeploy:GetDeployment",
+          "codedeploy:GetDeploymentConfig",
+          "codedeploy:GetApplicationRevision",
+          "codedeploy:RegisterApplicationRevision"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# Attach the policy to the pipeline user
+resource "aws_iam_user_policy_attachment" "pipeline" {
+  user       = aws_iam_user.pipeline_user.name
+  policy_arn = aws_iam_policy.pipeline_policy.arn
+}
