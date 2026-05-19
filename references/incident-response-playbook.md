@@ -30,7 +30,7 @@ The Patient Portal is completely unavailable or the error budget will be exhaust
 **Triggered by:**
 - `sre-lab-dev-canary-failed` - synthetic monitor failed 2 consecutive checks;
 portal is unreachable from outside the VPC
-- `sre-lab-dev-slo-burn-rate-too-high` - burn rate exceeded 14.4x; at this     rate the entire 30-day error budget is consumed in under 1 hour
+- `sre-lab-dev-slo-burn-rate-too-high` - burn rate exceeded 14.4x; at this rate the entire 30-day error budget is exhausted in 50 hours.
 
 ---
 
@@ -254,7 +254,7 @@ Portal is still unreachable 15 minutes after response begins, or root cause cann
 ### 4.2 - `sre-lab-dev-slo-burn-rate-too-high` (P1)
 
 **What it means:**
-The error budget is being consumed at more than 14.4 times the sustainable rate. At this pace, the entire 30-day error budget is exhausted in under one hour. This alarm fires even when the portal is technically up - a high volume of 5xx errors can burn the budget without triggering a full outage alarm.
+The error budget is being consumed at more than 14.4 times the sustainable rate. At this pace, the entire 30-day error budget is exhausted in 50 hours. This alarm fires even when the portal is technically up - a high volume of 5xx errors can burn the budget without triggering a full outage alarm.
 
 **Most likely causes:**
 1. A spike in 5xx errors caused by a bad deployment or upstream dependency
@@ -429,6 +429,14 @@ The Patient Portal is fully operational. All alarms have returned to OK state.
 ---
 
 ## Quick Reference — Severity at a Glance
+
+30 days = 720 hours of error budget
+
+Burn rate simply means: how many times faster than "sustainable" are you burning through it?
+
+Burn rate of 1x = you'll exhaust the budget in exactly 720 hours (right on pace)
+Burn rate of 14.4x = 720 / 14.4 = 50 hours
+Burn rate of 720x = 720 / 720 = 1 hour
 
 | Alarm | Severity | Page Who | Comms Required |
 |---|---|---|---|

@@ -373,12 +373,8 @@ In summary, here is what I accomplished this week:
 ## Month 8 — Capstone
 - Multi-tier, highly available production-grade system
 - Full IaC, observability, CI/CD pipeline
-- Chaos engineering with own runbooks
-- Post-mortem
-- SRE portfolio document
-- Python - Just enough for App Support/SRE work
-
-## Month 8 — Capstone
+- Chaos engineering with own runbooks and Post-mortem
+- Python - Just enough for App Support/SRE work and SRE portfolio document
 
 ### Week 1 — Capstone Foundation
 - [x] Created month-8-capstone/week-1 — copied from month-7-week-2 baseline

@@ -21,7 +21,7 @@
 | < 1.0 | Consuming budget slower than pace — healthy | No action |
 | 1.0 – 6.0 | On pace or slow burn — monitor | Watch dashboard |
 | > 6.0 | Slow burn alert — budget exhausted in ~5 days | Investigate |
-| > 14.4 | Fast burn alert — budget exhausted in ~1 hour | Page on-call immediately |
+| > 14.4 | Fast burn alert — budget exhausted in 50 hours | Page on-call immediately |
 
 ---
 

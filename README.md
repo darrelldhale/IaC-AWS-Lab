@@ -1,4 +1,4 @@
-# SRE Lite Lab — Northwind Health Group
+# AWS IaC Migration — Northwind Health Group
 
 ## The Plan
 

@@ -1,0 +1,112 @@
+name: Build, Test, Push, Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REGISTRY: 425924867120.dkr.ecr.us-east-1.amazonaws.com
+  ECR_REPOSITORY: sre-lab-dev-ecr-repo
+  ECS_CLUSTER: sre-lab-dev-ecs-cluster
+  ECS_SERVICE: sre-lab-dev-ecs-service
+  CODEDEPLOY_APP: sre-lab-dev-codedeploy-app
+  CODEDEPLOY_GROUP: sre-lab-dev-codedeploy-deployment-group
+  TASK_FAMILY: sre-lab-dev-ecs-task
+  CONTAINER_NAME: sre-lab-dev-ecs-container
+
+
+jobs:
+  deploy:
+    name: Build, Test, Push, Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} \
+            -t sre-lab-nginx:test \
+            ./app
+
+      - name: Smoke test
+        run: |
+          docker run -d --name smoke-test -p 8080:80 sre-lab-nginx:test
+          sleep 3
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
+          echo "HTTP status: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "Smoke test FAILED - expected 200, got $HTTP_STATUS"
+            docker logs smoke-test
+            docker stop smoke-test && docker rm smoke-test
+            exit 1
+          fi
+          echo "Smoke test PASSED"
+          docker stop smoke-test && docker rm smoke-test
+
+      - name: Push to ECR
+        run: |
+          docker push \
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+
+      - name: Register new task definition
+        id: task-def
+        run: |
+          IMAGE_URI=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+
+          aws ecs describe-task-definition \
+            --task-definition ${{ env.TASK_FAMILY }} \
+            --region ${{ env.AWS_REGION }} \
+            --query taskDefinition \
+            > task-def.json
+
+          jq --arg IMAGE "$IMAGE_URI" \
+             --arg CONTAINER "${{ env.CONTAINER_NAME }}" \
+            'del(.taskDefinitionArn, .revision, .status, .requiresAttributes,
+                  .placementConstraints, .compatibilities,
+                  .registeredAt, .registeredBy) |
+             .containerDefinitions |= map(
+               if .name == $CONTAINER then .image = $IMAGE else . end
+             )' task-def.json > new-task-def.json
+
+          NEW_TASK_DEF_ARN=$(aws ecs register-task-definition \
+            --cli-input-json file://new-task-def.json \
+            --region ${{ env.AWS_REGION }} \
+            --query taskDefinition.taskDefinitionArn \
+            --output text)
+
+          echo "task-def-arn=$NEW_TASK_DEF_ARN" >> $GITHUB_OUTPUT
+
+      - name: Deploy via CodeDeploy
+        run: |
+          TASK_DEF_ARN=${{ steps.task-def.outputs.task-def-arn }}
+
+          aws deploy create-deployment \
+            --application-name ${{ env.CODEDEPLOY_APP }} \
+            --deployment-group-name ${{ env.CODEDEPLOY_GROUP }} \
+            --deployment-config-name CodeDeployDefault.ECSAllAtOnce \
+            --description "GitHub Actions - ${{ github.sha }}" \
+            --region ${{ env.AWS_REGION }} \
+            --revision '{
+              "revisionType": "AppSpecContent",
+              "appSpecContent": {
+                "content": "{\"version\":0.0,\"Resources\":[{\"TargetService\":{\"Type\":\"AWS::ECS::Service\",\"Properties\":{\"TaskDefinition\":\"'"$TASK_DEF_ARN"'\",\"LoadBalancerInfo\":{\"ContainerName\":\"${{ env.CONTAINER_NAME }}\",\"ContainerPort\":80}}}}]}"
+              }
+            }'
