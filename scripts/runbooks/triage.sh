@@ -21,7 +21,7 @@ aws ecs describe-services \
 
 aws elbv2 describe-target-groups \
   --query "TargetGroups[?starts_with(TargetGroupName, 'sre-lab-dev')].TargetGroupArn" \
-  --output text | tr '\t' '\n' | while read arn; do
+  --output text | tr '\t' '\n' | while read -r arn; do
   echo "=== $arn ==="
   aws elbv2 describe-target-health \
     --target-group-arn "$arn" \
