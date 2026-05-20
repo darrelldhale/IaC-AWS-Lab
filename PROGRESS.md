@@ -1,6 +1,7 @@
 # SRE Lite Lab — Progress Tracker
 
 ## Environment
+
 - OS: Windows with WSL (Ubuntu) in VS Code
 - AWS Account: iamadmin user with admin access
 - Region: us-east-1
@@ -12,6 +13,7 @@
 ## Month 1 — SRE Foundations
 
 ### Week 1 — Linux Internals
+
 - [x] Processes, PIDs, parent/child relationships
 - [x] Signals and how the kernel communicates with processes
 - [x] File descriptors and why everything is a file
@@ -19,6 +21,7 @@
 - [x] cgroups: resource limits and container foundations
 
 ### Week 2 — Bash Scripting
+
 - [x] Variables, conditionals, loops, functions
 - [x] Error handling: set -euo pipefail, exit codes, || true
 - [x] Argument validation: $#, $1, $2, default values
@@ -29,6 +32,7 @@
 - [x] Built sre-logdig.sh — multi-source log search with time filtering
 
 ### Week 3 — Networking Fundamentals
+
 - [x] TCP/IP: how packets actually move
 - [x] DNS: resolution from stub to root
 - [x] HTTP: requests, responses, status codes
@@ -36,6 +40,7 @@
 - [x] Debugging tools: curl, dig, netstat, tcpdump
 
 ### Week 4 — Git Workflows + AWS CLI + IAM
+
 - [x] Git branching: checkout -b, merge, fast-forward vs merge commit
 - [x] Branch cleanup and push workflow
 - [x] AWS CLI output formats: json, table, text
@@ -50,10 +55,12 @@
 ## Month 2 — AWS Infrastructure
 
 ### Week 1
+
 - Configured AWS CLI and Terraform in WSL
 - Created GitHub repo and pushed initial structure
 
 ### Week 2
+
 - Built VPC, public/private subnets, IGW, NAT Gateway, route tables
 - Built App Server (EC2) in private subnet with nginx via user_data
 - Dropped Bastion in favor of SSM Session Manager for access
@@ -61,6 +68,7 @@
 - Learned: agent forwarding, SSM vs SSH, .gitignore discipline
 
 ### Week 3
+
 - Created SNS topic and email subscription for alerts
 - Built CloudWatch CPU alarm (triggers >80% for 4 minutes)
 - Built CloudWatch log group and nginx 4xx metric filter
@@ -70,6 +78,7 @@
 - Learned: data sources, IAM policy attachments, CloudWatch agent config
 
 ### Week 4
+
 - Installed stress tooling on App Server via SSM
 - Diagnosed and fixed misconfigured CloudWatch alarm dimensions
 - Successfully triggered CPU alarm above 80% threshold
@@ -81,12 +90,14 @@
 ---
 
 ## Month 3 — Infrastructure as Code
+
 Week 1 — Remote state + rebuild infra
 Week 2 — Terraform modules + workspaces
 Week 3 — CloudFormation
 Week 4 — SSM at scale + Tagging strategies
 
 ### Week 1 — Remote State + Infrastructure Rebuild
+
 - [x] Created S3 bucket for Terraform remote state with versioning and public access blocked
 - [x] Created DynamoDB table for state locking
 - [x] Consolidated Month 2 week-2 and week-3 configs into a single Terraform root
@@ -99,6 +110,7 @@ Week 4 — SSM at scale + Tagging strategies
 - [x] Learned: remote state, state locking, bootstrap problem, consolidated roots
 
 ### Week 2 — Terraform Modules + Workspaces
+
 - [x] Refactored flat main.tf into three reusable modules: networking, compute, observability
 - [x] Each module has its own variables.tf, main.tf, and outputs.tf
 - [x] Wired module outputs to module inputs via root main.tf
@@ -111,6 +123,7 @@ Week 4 — SSM at scale + Tagging strategies
 - [x] Learned: modules, data flow between modules, workspaces, ternary expressions
 
 ### Week 3 — CloudFormation
+
 - [x] Learned CloudFormation vocabulary: stacks, parameters, resources, outputs
 - [x] Mapped CloudFormation concepts to Terraform equivalents
 - [x] Learned CloudFormation intrinsic functions: !Sub, !Ref
@@ -123,6 +136,7 @@ Week 4 — SSM at scale + Tagging strategies
 - [x] Learned: CloudFormation vs Terraform tradeoffs, when each is used in production
 
 ### Week 4 — SSM at Scale + Tagging Strategies
+
 - [x] Built SSM Document — SRELab-HealthCheck with 4 steps: service, disk, memory, failed services
 - [x] Registered document with AWS via aws ssm create-document
 - [x] Ran document against EC2 instance via aws ssm send-command
@@ -134,17 +148,19 @@ Week 4 — SSM at scale + Tagging strategies
 - [x] Applied tags to all 17 resources via terraform apply
 - [x] Verified Environment tag enables SSM fleet targeting — 1 target, 1 completed, 0 errors
 - [x] Learned: SSM Documents vs interactive sessions, tag-based targeting, merge pattern in Terraform
-  [x] Enhanced SRELab-HealthCheck SSM document — added TOP CPU CONSUMERS step (ps aux sorted by CPU)
+      [x] Enhanced SRELab-HealthCheck SSM document — added TOP CPU CONSUMERS step (ps aux sorted by CPU)
 
 ---
 
 ## Month 4 — Compute, Containers & Deployment
+
 - EC2 deep dive: launch templates, AMIs, Auto Scaling Groups
 - Docker fundamentals and ECS Fargate
 - Blue/Green and canary deployment patterns
 - Introduction to EKS
 
 ### Week 1 — EC2 Deep Dive: AMI, Launch Template, ASG
+
 - [x] Destroyed Month 3 week-2 stack — AMI survived independently
 - [x] Installed SRE toolkit on existing instance: htop, jq, net-tools, tcpdump, git, stress
 - [x] Baked custom AMI: sre-lab-base-ami-v1 (ami-06e35715bc33b8177)
@@ -156,8 +172,8 @@ Week 4 — SSM at scale + Tagging strategies
 - [x] Verified both ASG instances healthy in target group
 - [x] Verified SSM access into private instance — no public IP, no SSH
 
-
 ### Week 2 — Docker Fundamentals
+
 - [x] Verified Docker installation in WSL
 - [x] Pulled and ran hello-world image — understood local cache behavior
 - [x] Built custom nginx image with two-line Dockerfile: sre-lab-nginx:v1
@@ -171,8 +187,8 @@ Week 4 — SSM at scale + Tagging strategies
 - [x] Learned: images vs containers, Dockerfile, layer caching, volumes, docker exec, rmi
 - [x] Learned: Docker vs ECS vs EKS — packaging vs orchestration vs scale
 
-
 ### Week 3 — ECS Fargate
+
 - [x] Built self-contained Week 3 Terraform root — networking module reused, compute module rebuilt for ECS
 - [x] Created ECR repository with scan on push enabled
 - [x] Built ECS compute module: Security Groups, IAM execution and task roles, ECS Exec policy
@@ -198,6 +214,7 @@ In summary, here is what I accomplished this week:
 -Verified via ALB DNS — traffic flowing through the load balancer to the containers
 
 ### Week 4 — Blue/Green Deployments
+
 - [x] Built Week 4 Terraform root — networking reused, compute module rebuilt for blue/green
 - [x] Added second ALB target group (green) alongside existing blue target group
 - [x] Added test listener on port 8080 — allows testing green before traffic shift
@@ -214,16 +231,17 @@ In summary, here is what I accomplished this week:
 - [x] Read deployment logs — confirmed all-at-once swap vs rolling drain pattern
 - [x] Learned: blue/green vs rolling, CodeDeploy application/deployment group, deployment controller types, lifecycle ignore_changes
 
-
 ---
 
 ## Month 5 — Observability
+
 - CloudWatch the right way: structured logging
 - Real on-call dashboard
 - SLIs, SLOs, error budgets
 - Synthetic monitoring and canaries
 
 ### Week 1 — Structured Logging + Metric Filters
+
 - [x] Switched nginx from plain-text to JSON structured logging via custom nginx.conf
 - [x] Built and pushed v5 image with JSON logging baked in
 - [x] Created month-5-observability/week-1 as self-contained Terraform root
@@ -239,6 +257,7 @@ In summary, here is what I accomplished this week:
 - [x] Learned: structured logging, metric filters, Logs Insights queries, log-to-metric pipeline
 
 ### Week 2 — Alarms, SNS, and On-Call Dashboard
+
 - [x] Built SNS topic: sre-lab-dev-alerts — central notification channel for all alarms
 - [x] Added email subscription and confirmed — alarm notifications delivered to on-call email
 - [x] Wired alarm_actions and ok_actions to SNS topic on all alarms
@@ -252,18 +271,18 @@ In summary, here is what I accomplished this week:
 - [x] Discovered internet scanner activity in 4xx logs — PHP webshell probes, .git/config theft attempts, .env secrets hunting
 - [x] Learned: SNS topics and subscriptions, alarm actions, CloudWatch dashboard JSON, scanner noise vs real errors
 
-
 ### Week 3 — SLIs, SLOs, and Error Budgets
+
 - [ ] Defined Northwind SLO: 99.5% success rate over 30-day rolling window
 - [ ] Wrote SLO definitions doc: references/slo-definitions.md
 - [ ] Added Row 4 to on-call dashboard — SLI success rate, burn rate, SLO reference card
-- [ ] SLI widget uses metric math: (total - 5xx) / total * 100 with 99.5% annotation line
+- [ ] SLI widget uses metric math: (total - 5xx) / total \* 100 with 99.5% annotation line
 - [ ] Burn rate widget: (5xx rate) / 0.005 with fast/slow burn threshold annotations
 - [ ] Added burn rate alarm using metric_query blocks — fires when burn rate exceeds 14.4x
 - [ ] Learned: SLIs, SLOs, error budgets, burn rate math, metric math alarms vs single-metric alarms, (known after apply) in Terraform plan diffs
 
-
 ### Week 4 — Synthetic Monitoring and Canaries
+
 - [x] Introduced terraform.tfvars — separated environment values from variable definitions
 - [x] Added terraform.tfvars.example as committed reference — real values gitignored
 - [x] Added archive provider to root — zips canary script at plan time
@@ -274,9 +293,11 @@ In summary, here is what I accomplished this week:
 - [x] Added canary failed alarm — fires on 2 consecutive failures, treat_missing_data = breaching
 - [x] Added canary alarm to dashboard Row 1 — all 5 alarms visible in one panel
 - [x] Learned: synthetic vs reactive monitoring, templatefile, archive provider, path.module, zip_file path vs filebase64, terraform import for state drift, terraform.tfvars pattern
+
 ---
 
 ## Month 6 — Incident Management & Chaos Engineering
+
 - Full incident response playbook
 - AWS Fault Injection Simulator (FIS)
 - Runnable runbooks
@@ -284,6 +305,7 @@ In summary, here is what I accomplished this week:
 - Backup/restore and DR testing
 
 ### Week 1 — Incident Response Playbook
+
 - [x] Created month-6-incident-chaos-engineering/week-1 — copied Week 4 infra files as baseline
 - [x] Cut month-6-week-1 branch
 - [x] Built references/incident-response-playbook.md — full Northwind playbook
@@ -295,6 +317,7 @@ In summary, here is what I accomplished this week:
 - [x] Learned: playbook vs runbook distinction, severity classification, incident lifecycle
 
 ### Week 2 — AWS Fault Injection Simulator (FIS)
+
 - [x] Added ecs_cluster_arn output to compute module — required for FIS target resolution
 - [x] Added burn_rate_alarm_arn output to observability module — used as FIS stop condition
 - [x] Added comments to observability outputs.tf — consistent with compute module style
@@ -311,6 +334,7 @@ In summary, here is what I accomplished this week:
 - [x] Learned: chaos via bad deployment is more reliable than FIS task-stop for fast-recovering Fargate services
 
 ### Week 3 — Runnable Runbooks
+
 - [x] Created scripts/runbooks/ directory with shared config.sh — centralizes all resource names and region
 - [x] Built triage.sh — checks all 5 alarms in one command, routes to correct runbook
 - [x] Built investigate-5xx.sh — alarm state, log query, ECS health, last CodeDeploy deployment, rollback guidance
@@ -321,6 +345,7 @@ In summary, here is what I accomplished this week:
 - [x] Learned: runnable vs documentary runbooks, scripts complement not replace the First Responder Checklist, variables resolve at print time for copy-paste readiness, -z flag for empty string checks, FAILED grep pattern for S3 canary artifacts
 
 ### Week 4 — On-call Simulation, Backup/Restore + DR Testing
+
 - [x] Rebuilt week-4 infra from week-3 baseline — removed FIS resources (proven ineffective for fast-recovering Fargate)
 - [x] Deployed v9 clean image — verified Northwind portal healthy before simulation
 - [x] Ran on-call simulation — deployed v10 bad image, triggered http-5xx-too-high alarm
@@ -339,10 +364,12 @@ In summary, here is what I accomplished this week:
 ---
 
 ## Month 7 — Security, Networking & Cost
+
 - AWS Security Hub, GuardDuty, Config
 - VPC Flow Logs
 
 ### Week 1 — AWS Security Hub, GuardDuty, and Config
+
 - [x] Enabled GuardDuty detector — monitors CloudTrail, VPC Flow Logs, and DNS logs for threats
 - [x] Built Config S3 bucket — versioned, encrypted, public access blocked, bucket policy for Config delivery
 - [x] Built Config IAM role with inline policy — S3 delivery and resource read permissions
@@ -354,8 +381,8 @@ In summary, here is what I accomplished this week:
 - [x] Reviewed real Security Hub findings — MFA, CloudTrail, and encryption gaps surfaced
 - [x] Learned: GuardDuty vs Config vs Security Hub roles, terraform untaint, bucket policies for AWS services, inline vs managed IAM policies
 
-
 ### Week 2 — VPC Flow Logs
+
 - [x] Added CloudWatch Log Group to networking module — 30-day retention for HIPAA compliance
 - [x] Added IAM role and inline policy to networking module — grants VPC Flow Logs service write access to CloudWatch
 - [x] Added VPC Flow Log resource — captures ALL traffic (ACCEPT and REJECT) across the VPC
@@ -368,15 +395,18 @@ In summary, here is what I accomplished this week:
 - [x] Alarm fired immediately on deploy — 105 real rejected connections detected
 - [x] Queried flow logs with Logs Insights — identified Telnet scanners, proxy hunters, mail relay probes
 - [x] Learned: VPC flow log format (space-delimited vs JSON), REJECT as security signal, flow logs as HIPAA audit evidence
+
 ---
 
 ## Month 8 — Capstone
+
 - Multi-tier, highly available production-grade system
 - Full IaC, observability, CI/CD pipeline
 - Chaos engineering with own runbooks and Post-mortem
 - Python - Just enough for App Support/SRE work and SRE portfolio document
 
 ### Week 1 — Capstone Foundation
+
 - [x] Created month-8-capstone/week-1 — copied from month-7-week-2 baseline
 - [x] Cut month-8-week-1 branch
 - [x] Fixed stale last-known-good image comment in terraform.tfvars — updated to v9
@@ -387,12 +417,12 @@ In summary, here is what I accomplished this week:
 - [x] Verified: 2/2 ECS tasks healthy, both IPs in blue target group, all 5 alarms OK, canary passing
 - [x] Learned: ADR as engineering artifact, capstone as integration of all prior months
 
-
 ### Week 2 — CI/CD Pipeline
+
 - [x] Created repo-level app/ folder — stable pipeline source, Dockerfile/nginx.conf/index.html
 - [x] Fixed Dockerfile COPY path — updated from app/index.html to index.html for flat structure
 - [x] Built .github/workflows/deploy.yml — full GitHub Actions pipeline
-- [x] Pipeline trigger: push to main with changes in app/** only — doc commits don't deploy
+- [x] Pipeline trigger: push to main with changes in app/\*\* only — doc commits don't deploy
 - [x] Pipeline stages: Build → Smoke Test → Push to ECR → Register task definition → CodeDeploy
 - [x] Smoke test: runs container locally on runner, curls it, asserts 200 before any push
 - [x] Built pipeline-iam.tf — dedicated IAM user with least-privilege scoped permissions
@@ -404,6 +434,7 @@ In summary, here is what I accomplished this week:
 - [x] Learned: GitHub Actions triggers, path filters, smoke testing, inline AppSpec for CodeDeploy, GITHUB_OUTPUT
 
 ### Week 3 — Chaos Engineering + Post-Mortem
+
 - [x] Created chaos-build/ directory — self-contained bad image build context
 - [x] Attempted pipeline chaos — smoke test caught bad nginx image, pipeline stopped before ECR push
 - [x] Built and pushed chaos image manually to ECR — bypassed pipeline entirely
@@ -414,3 +445,15 @@ In summary, here is what I accomplished this week:
 - [x] Wrote post-mortem: post-mortem-chaos-001.md — full timeline, root cause, lessons learned
 - [x] Increased CodeDeploy termination wait time from 5 to 15 minutes — wired through root module
 - [x] Learned: smoke test protects pipeline path only, ECR access controls are a gap, Step 4 window is a recovery asset
+
+### Week 4 — Python for SRE + Portfolio Document + Resume
+
+- [x] Verified Python 3.12.3 and pip 24.0 installed in WSL
+- [x] Installed boto3 1.43.11 and requests 2.31.0 via pip
+- [x] Confirmed boto3 authenticated to AWS via iamadmin ARN
+- [x] Built health-check.py — on-demand HTTP health check with latency measurement and pass/fail verdict
+- [x] Built alarm-check.py — pulls current state of all 6 CloudWatch alarms via boto3 and prints triage summary
+- [x] Generated darrell-hale-sre-portfolio.pdf — 9-page professional portfolio document covering all 8 months
+- [x] Generated darrell-hale-resume.pdf — complete resume rewrite in matching style, 2 pages
+- [x] Generated sre-lab-whats-next.md — personal ongoing guide: enhancements, daily/weekly/monthly routines, certifications, next skills
+- [x] Learned: boto3 credential chain, requests library, reportlab PDF generation, pip --break-system-packages flag
