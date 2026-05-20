@@ -402,3 +402,15 @@ In summary, here is what I accomplished this week:
 - [x] Verified: ALB returned 200, all 5 alarms OK, 2/2 ECS tasks running
 - [x] Updated action versions to support Node.js 24 ahead of June 2nd deprecation deadline
 - [x] Learned: GitHub Actions triggers, path filters, smoke testing, inline AppSpec for CodeDeploy, GITHUB_OUTPUT
+
+### Week 3 — Chaos Engineering + Post-Mortem
+- [x] Created chaos-build/ directory — self-contained bad image build context
+- [x] Attempted pipeline chaos — smoke test caught bad nginx image, pipeline stopped before ECR push
+- [x] Built and pushed chaos image manually to ECR — bypassed pipeline entirely
+- [x] Deployed chaos image via CodeDeploy — slipped past health checks, 100% traffic shifted to bad image
+- [x] Discovered ECS task health vs ALB target health distinction — CodeDeploy uses ECS state, not ALB health
+- [x] Worked live P1 incident — 5xx alarms firing, alert emails arriving under real pressure
+- [x] Rolled back via CodeDeploy console during Step 4 termination wait window
+- [x] Wrote post-mortem: post-mortem-chaos-001.md — full timeline, root cause, lessons learned
+- [x] Increased CodeDeploy termination wait time from 5 to 15 minutes — wired through root module
+- [x] Learned: smoke test protects pipeline path only, ECR access controls are a gap, Step 4 window is a recovery asset

@@ -18,3 +18,4 @@ terraform.tfvars
 
 # Zip file for Lambda
 canary.zip
+references/sre-lab-whats-next.md
