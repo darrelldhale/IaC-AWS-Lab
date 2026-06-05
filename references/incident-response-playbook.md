@@ -21,7 +21,7 @@ Severity is assigned the moment an incident is declared. It drives response spee
 
 ### P1 - Critical (Full Outage)
 
-The Patient Portal is completely unavailable or the error budget will be exhausted within one hour at the current failure rate.
+The Patient Portal is completely unavailable or the error budget will be exhausted within 5 days at the current failure rate.
 
 **Response time:** Immediate. Wake people up.
 **Who is paged:** On-call engineer + engineering lead

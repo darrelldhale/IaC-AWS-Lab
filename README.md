@@ -3,7 +3,7 @@
 ## The Plan
 
 Northwind Health Group is a mid-sized healthcare organization modernizing
-their on-premises infrastructure by migrating to AWS. As their infrastructure and reliability engineer, the mandate was clear:
+their on-premises infrastructure by migrating to AWS. As their infrastructure and support engineer, the tasks were clear:
 
 - **Managed services where possible** — Northwind's lean ops team cannot
   afford to patch servers, manage clusters, or babysit infrastructure.
@@ -26,8 +26,7 @@ their on-premises infrastructure by migrating to AWS. As their infrastructure an
 
 ## What Was Built
 
-Eight months of real infrastructure, built and operated as if Northwind
-were a production client. Each month added a permanent layer to the system.
+Real infrastructure, built and operated for Northwind Health Group. Each month added a permanent layer to the system.
 
 ## Environment
 

@@ -22,3 +22,9 @@
 - Promoted v11 image to last-known-good in terraform.tfvars
 - ALB DNS changed after spinup — new load balancer created by fresh terraform apply
 - Certification track: targeting AWS Certified CloudOps Engineer – Associate (SOA-C03)
+
+## 2026-05-21 (continued)
+- SOA-C03 study plan committed — target exam 2026-06-25
+- Track 1, 2, and 3 all open and defined
+- Primary focus confirmed: troubleshooting and chaos engineering
+- Next session: begin Route 53 study (Track 1) and/or HTTPS build (Track 3)
