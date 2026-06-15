@@ -92,7 +92,7 @@ Every incident at Northwind Health Group moves through five phases. Each phase h
 **Exit:** A human has acknowledged the alert.
 
 The detection layer for Northwind consists of:
-- Five CloudWatch alarms wired to the `sre-lab-dev-alerts` SNS topic
+- Six CloudWatch alarms wired to the `sre-lab-dev-alerts` SNS topic
 - A synthetic canary running every 60 seconds hitting the ALB
 - The on-call dashboard at `sre-lab-dev-dashboard` in CloudWatch
 
@@ -136,7 +136,7 @@ Steps:
 **Exit:** All alarms return to OK state, canary passes two consecutive checks, and a resolution message is sent to stakeholders.
 
 Steps:
-1. Confirm all five alarms are green on the dashboard
+1. Confirm all six alarms are green on the dashboard
 2. Confirm the canary has passed at least two consecutive 1-minute checks
 3. Confirm the SLI success rate is at or above 99.5%
 4. Send resolution notification using the template in Section 5
@@ -152,7 +152,7 @@ Steps:
 
 For P1 and P2 incidents a post-mortem is mandatory. For P3 a brief incident log entry is sufficient. P4 requires no follow-up documentation.
 
-The post-mortem template lives at: `references/post-mortem-template.md`
+The post-mortem template lives at: `references/post-mortem-xx-xx.md`
 
 ---
 
@@ -377,7 +377,6 @@ Incident declared at [TIME] UTC.
 **Severity:** [P1 / P2]
 **Status:** Investigating
 **Impact:** [One sentence — what patients are experiencing right now]
-**Alarms firing:** [List alarm names from the dashboard]
 
 Our on-call engineer is actively investigating. The next update will be sent
 in 15 minutes.

@@ -28,3 +28,17 @@
 - Track 1, 2, and 3 all open and defined
 - Primary focus confirmed: troubleshooting and chaos engineering
 - Next session: begin Route 53 study (Track 1) and/or HTTPS build (Track 3)
+
+## 2026-06-15
+- Morning check: all 6 alarms OK, canary 3/3 PASSED, VPC rejects 746
+- Ran chaos scenario: ECS service scaled to 0 — simulated accidental scale-down
+- Detected: 14:52 — canary first failure caught by synthetic monitoring
+- Declared: 14:57 — triage complete, 4 min detection-to-declaration
+- Recovered: 15:15 — desired count restored to 2, canary passing
+- Total outage duration: 23 minutes
+- Key finding: log-based alarms blind when compute layer disappears — canary
+  was the only signal during a 100% outage
+- Drafted initial and resolution merchant communications end to end
+- Fixed investigate-canary.sh — curl now handles connection failures gracefully
+- Fixed config.sh — ALB_DNS now dynamic, survives terraform destroy/apply
+- Wrote post-mortem-chaos-002.md
