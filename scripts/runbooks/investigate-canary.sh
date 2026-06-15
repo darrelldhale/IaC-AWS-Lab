@@ -22,10 +22,12 @@ aws cloudwatch describe-alarms \
 # --- STEP 2: Direct connectivity test ---
 echo ""
 echo "[2/4] Testing ALB connectivity directly..."
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "http://$ALB_DNS")
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "http://$ALB_DNS" || echo "000")
 echo "HTTP response code: $HTTP_CODE"
 if [ "$HTTP_CODE" == "200" ]; then
   echo "ALB is responding normally — canary failure may be transient"
+elif [ "$HTTP_CODE" == "000" ]; then
+  echo "ALB unreachable — connection failed or timed out"
 else
   echo "ALB returned $HTTP_CODE — connectivity issue confirmed"
 fi
