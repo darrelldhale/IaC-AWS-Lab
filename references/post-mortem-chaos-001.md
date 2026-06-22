@@ -1,4 +1,4 @@
-# Post-Mortem: Chaos Deployment — Bad Image Slips Past Health Checks
+# Post-Mortem: Chaos Deployment - Bad Image Slips Past Health Checks
 **Date:** 2026-05-20
 **Severity:** P1 — 100% of production traffic serving HTTP 500
 **Duration:** ~10 minutes (deployment complete to rollback complete)
@@ -9,7 +9,7 @@
 
 ## Summary
 
-A deliberately broken nginx image was manually pushed to ECR and deployed via CodeDeploy as a controlled chaos engineering exercise. The image was designed to return HTTP 500 on all real traffic while returning 200 on the `/health` path. Contrary to expectations, CodeDeploy completed the deployment successfully — shifting 100% of traffic to the bad image — before the ALB health checks had time to mark the tasks as unhealthy. Alert emails began firing immediately. The service was recovered via CodeDeploy rollback.
+A deliberately broken nginx image was manually pushed to ECR and deployed via CodeDeploy as a controlled chaos engineering exercise. The image was designed to return HTTP 500 on all real traffic while returning 200 on the `/health` path. Contrary to expectations, CodeDeploy completed the deployment successfully, shifting 100% of traffic to the bad image before the ALB health checks had time to mark the tasks as unhealthy. Alert emails began firing immediately. The service was recovered via CodeDeploy rollback.
 
 A secondary finding emerged earlier in the exercise: a pipeline-path attempt to deploy the same bad image was **caught by the smoke test** and stopped before anything reached ECR or production.
 

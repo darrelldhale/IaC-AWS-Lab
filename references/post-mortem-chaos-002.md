@@ -1,8 +1,8 @@
 # Post-Mortem: ECS service scaled to zero.
 
 **Date:** 2026-06-15
-**Severity:** P1 — 100% of production traffic serving HTTP 503
-**Duration:** ~23 minutes
+**Severity:** P1 - 100% of production traffic serving HTTP 503
+**Duration:** 23 minutes
 **Author:** Darrell Hale
 **Status:** Resolved
 
@@ -16,10 +16,10 @@ Our monitoring system detected that the patient portal at http://sre-lab-dev-app
 
 ## Timeline
 
-14:52 — First canary failure
-14:53 — Second failure confirmed, detection noted
-14:57 — Triage complete, incident declared, engineering engaged
-15:15 — Service restored, canary passing
+14:52 - First canary failure
+14:53 - Second failure confirmed, detection noted
+14:57 - Triage complete, incident declared, engineering engaged
+15:15 - Service restored, canary passing
 
 ---
 
@@ -32,7 +32,7 @@ The ECS service desired count was set to 0. This was caused by a misconfiguratio
 ## What Went Well
 
 **The observability stack detected the failure immediately.**
-The moment 503s started flowing, the `investigate-canary` alarm fired and alert emails were delivered. Detection time was effectively zero — the alarm was already watching.
+The moment 503s started flowing, the `investigate-canary` alarm fired and alert emails were delivered. Detection time was effectively zero, the alarm was already watching.
 
 **The runbooks were ready.**
 `triage.sh` and `investigate-canary.sh` were run after receiving the first alarm, confirming the issue.
