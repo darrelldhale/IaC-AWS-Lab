@@ -9,7 +9,7 @@
 
 ## Purpose
 
-This playbook defines how Northwind Health Group responds to infrastructure and application incidents affecting the Patient Portal. It covers severity levels, roles, the incident lifecycle, alarm-specific response procudures, and communication templates.
+This playbook defines how Northwind Health Group responds to infrastructure and application incidents affecting the Patient Portal. It covers severity levels, roles, the incident lifecycle, alarm-specific response procedures, and communication templates.
 
 Every on-call engineer is expected to have this document nearby before their shift.
 
