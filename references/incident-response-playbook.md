@@ -3,7 +3,7 @@
 **Organization:** Northwind Health Group
 **System:** Patient Portal (ECS Fargate on AWS)
 **Maintained by:** SRE / Application Support
-**Last updated:** 2026-02-14
+**Last updated:** 2026-06-14
 
 ---
 
