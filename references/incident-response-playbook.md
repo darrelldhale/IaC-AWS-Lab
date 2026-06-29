@@ -421,7 +421,7 @@ Incident resolved at [TIME] UTC.
 **Resolution:** [One sentence - what was done to fix it]
 **Follow-up:** A post-mortem will be completed within 48 hours.
 
-The Patient Portal is fully operational. All alarms have returned to OK state.
+The Patient Portal is fully operational. All alarms have returned to OK state. We will continue to monitor the system and provide updates if any further issues arise.
 
 **Incident Commander:** [Name]
 
