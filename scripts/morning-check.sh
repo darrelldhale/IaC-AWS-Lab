@@ -58,7 +58,7 @@ echo ""
 echo "▶ [4/4] GitHub Actions"
 if command -v gh &> /dev/null; then
   gh run list \
-    --repo darrelldhale/sre-lite-lab \
+    --repo darrelldhale/IaC-AWS-Lab \
     --limit 5 \
     --json status,conclusion,workflowName,createdAt \
     --jq '.[] | "\(.createdAt)  \(.workflowName) — \(.status) / \(.conclusion)"'

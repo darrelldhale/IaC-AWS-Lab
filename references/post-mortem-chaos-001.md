@@ -47,7 +47,7 @@ CodeDeploy evaluates ECS task health (is the container running?) not ALB target 
 | ECS task health | Is the container process running? | ECS service, CodeDeploy |
 | ALB target health | Is the HTTP response in the expected range? | ALB routing |
 
-These are independent systems. A container can be RUNNING and returning 500 — ECS calls it healthy, the ALB calls it unhealthy. CodeDeploy acted on the ECS signal, not the ALB signal.
+These are independent systems. A container can be RUNNING and returning 500 - ECS calls it healthy, the ALB calls it unhealthy. CodeDeploy acted on the ECS signal, not the ALB signal.
 
 ---
 
