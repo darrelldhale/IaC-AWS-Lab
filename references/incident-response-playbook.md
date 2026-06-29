@@ -354,7 +354,7 @@ Tasks begin restarting and 5xx errors appear, or memory remains above 80% for mo
 
 ---
 
-## Section 5 — Communication Templates
+## Section 5 - Communication Templates
 
 Use these templates exactly as written. Fill in the bracketed fields only.
 Do not rewrite or improvise during an active incident.
@@ -376,7 +376,7 @@ Incident declared at [TIME] UTC.
 
 **Severity:** [P1 / P2]
 **Status:** Investigating
-**Impact:** [One sentence — what patients are experiencing right now]
+**Impact:** [One sentence - what patients are experiencing right now]
 
 Our on-call engineer is actively investigating. The next update will be sent
 in 15 minutes.
@@ -427,7 +427,7 @@ The Patient Portal is fully operational. All alarms have returned to OK state.
 
 ---
 
-## Quick Reference — Severity at a Glance
+## Quick Reference - Severity at a Glance
 
 30 days = 720 hours of error budget
 
