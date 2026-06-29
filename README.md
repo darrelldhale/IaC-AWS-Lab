@@ -198,7 +198,7 @@ requires cost predictability. Both are addressed here.
   stored and rotated automatically. No secrets in environment variables,
   no secrets in code, no secrets in Terraform state.
 - **Parameter Store** - Non-sensitive configuration stored centrally,
-  versioned, and accessible to ECS tasks via IAM — not hardcoded into
+  versioned, and accessible to ECS tasks via IAM - not hardcoded into
   container images.
 
 **Cost:**
@@ -206,7 +206,7 @@ requires cost predictability. Both are addressed here.
   tagged resource. Budget alerts fire before overspend happens, not after
   the invoice arrives.
 - **Rightsizing** - ECS task CPU and memory allocations reviewed against
-  actual utilization. Fargate pricing is per vCPU and GB — over-allocated
+  actual utilization. Fargate pricing is per vCPU and GB - over-allocated
   tasks are direct waste.
 
 Chosen because Northwind cannot afford a dedicated security team. Native
@@ -243,7 +243,7 @@ system that Northwind could operate on day one.
   decisions made, the incidents handled, and the lessons learned.
 
 The capstone is not a tutorial completion. It is evidence that Northwind's
-infrastructure can be built, operated, broken, fixed, and handed off —
+infrastructure can be built, operated, broken, fixed, and handed off
 by one engineer, with documented processes, in a way that scales.
 
 ---
@@ -252,7 +252,7 @@ by one engineer, with documented processes, in a way that scales.
 
 **SSM over SSH** - No bastion host, no key pairs. SSM Session Manager
 provides auditable, IAM-controlled shell access. Required for Northwind's
-compliance posture.
+compliance requirements.
 
 **Fargate over EC2** - Northwind's ops team is lean. Fargate eliminates
 EC2 patching, capacity planning, and AMI management for the container
