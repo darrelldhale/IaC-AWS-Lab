@@ -163,7 +163,7 @@ Northwind Health Group runs a lean on-call rotation. Role assignments scale with
 ### Incident Commander (IC)
 
 **Owns:** The incident from declaration to post-mortem.
-**Does not:** Perform hands-on technical investigation during the an active incident.
+**Does not:** Perform hands-on technical investigation during an active incident.
 
 Responsibilities:
 - Declares the incident and assigns severity
