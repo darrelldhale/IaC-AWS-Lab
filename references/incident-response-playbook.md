@@ -168,7 +168,7 @@ Northwind Health Group runs a lean on-call rotation. Role assignments scale with
 Responsibilities:
 - Declares the incident and assigns severity
 - Assigns Technical Lead and Communications Lead
-- makes escalation decisions
+- Makes escalation decisions
 - Calls the incident resolved when exit conditions are met
 - Ensures the post-mortem is written within 48 hours
 
@@ -368,7 +368,7 @@ of declaration.
 
 ---
 
-**Subject:** [P1/P2] Northwind Patient Portal — Incident Declared
+**Subject:** [P1/P2] Northwind Patient Portal - Incident Declared
 
 **Body:**
 
@@ -390,7 +390,7 @@ in 15 minutes.
 
 ---
 
-**Subject:** [P1/P2] Northwind Patient Portal — Incident Update [HH:MM UTC]
+**Subject:** [P1/P2] Northwind Patient Portal - Incident Update [HH:MM UTC]
 
 **Body:**
 
@@ -398,7 +398,7 @@ Update as of [TIME] UTC.
 
 **Severity:** [P1 / P2]
 **Status:** [Investigating / Root cause identified / Fix in progress]
-**Current findings:** [One or two sentences — what has been confirmed so far]
+**Current findings:** [One or two sentences - what has been confirmed so far]
 **Next update:** [TIME] UTC
 
 ---
@@ -410,15 +410,15 @@ two consecutive checks, SLI at or above 99.5%.
 
 ---
 
-**Subject:** [RESOLVED] Northwind Patient Portal — Incident Closed [HH:MM UTC]
+**Subject:** [RESOLVED] Northwind Patient Portal - Incident Closed [HH:MM UTC]
 
 **Body:**
 
 Incident resolved at [TIME] UTC.
 
 **Duration:** [Start time] UTC to [End time] UTC
-**Root cause:** [One sentence — what caused the incident]
-**Resolution:** [One sentence — what was done to fix it]
+**Root cause:** [One sentence - what caused the incident]
+**Resolution:** [One sentence - what was done to fix it]
 **Follow-up:** A post-mortem will be completed within 48 hours.
 
 The Patient Portal is fully operational. All alarms have returned to OK state.
@@ -439,8 +439,8 @@ Burn rate of 720x = 720 / 720 = 1 hour
 
 | Alarm | Severity | Page Who | Comms Required |
 |---|---|---|---|
-| `canary-failed` | P1 | On-call + Eng Lead | Yes — within 15 min |
-| `slo-burn-rate-too-high` | P1 | On-call + Eng Lead | Yes — within 15 min |
-| `http-5xx-too-high` | P2 | On-call only | Yes — if >10 min |
-| `ecs-cpu-too-high` | P2 | On-call only | Yes — if >10 min |
-| `ecs-memory-too-high` | P2 | On-call only | Yes — if >10 min |
+| `canary-failed` | P1 | On-call + Eng Lead | Yes - within 15 min |
+| `slo-burn-rate-too-high` | P1 | On-call + Eng Lead | Yes - within 15 min |
+| `http-5xx-too-high` | P2 | On-call only | Yes - if >10 min |
+| `ecs-cpu-too-high` | P2 | On-call only | Yes - if >10 min |
+| `ecs-memory-too-high` | P2 | On-call only | Yes - if >10 min |
