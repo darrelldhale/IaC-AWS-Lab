@@ -74,7 +74,7 @@ No patient impact. Logged for trend awareness and post-incident review.
 **Patient communication:** Not required
 
 **Examples:**
-- Scanner noise in 4xx logs (PHP probes, .env hunting — expected background
+- Scanner noise in 4xx logs (PHP probes, .env hunting, expected background
   activity on any public endpoint)
 - Canary latency increase without a failure
 - Brief CPU or memory spikes that return to baseline within one evaluation period
