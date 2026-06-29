@@ -1,6 +1,6 @@
 # Post-Mortem: Chaos Deployment - Bad Image Slips Past Health Checks
 **Date:** 2026-05-20
-**Severity:** P1 — 100% of production traffic serving HTTP 500
+**Severity:** P1 - 100% of production traffic serving HTTP 500
 **Duration:** ~10 minutes (deployment complete to rollback complete)
 **Author:** Darrell Hale
 **Status:** Resolved
@@ -34,7 +34,7 @@ A secondary finding emerged earlier in the exercise: a pipeline-path attempt to 
 
 ## Root Cause
 
-The chaos image returned HTTP 500 on `/` — the path used by the ALB target group health check. The expectation was that CodeDeploy would wait for green tasks to pass health checks before shifting traffic, and that the 500 responses would prevent this.
+The chaos image returned HTTP 500 on `/` - the path used by the ALB target group health check. The expectation was that CodeDeploy would wait for green tasks to pass health checks before shifting traffic, and that the 500 responses would prevent this.
 
 **What actually happened:**
 
@@ -86,7 +86,7 @@ The `iamadmin` user was able to push a bad image directly to ECR, bypassing the 
 |---|---|---|
 | Wire `sre-lab-dev-http-5xx-too-high` alarm to CodeDeploy deployment group as a guardrail | High | SRE |
 | Restrict ECR push permissions — remove direct push from `iamadmin`, pipeline IAM user only | High | Security |
-| Add ALB target group health check verification step to deployment runbook — confirm targets are healthy in both TGs after every deployment | Medium | SRE |
+| Add ALB target group health check verification step to deployment runbook - confirm targets are healthy in both TGs after every deployment | Medium | SRE |
 | Document the ECS task health vs ALB target health distinction in the incident response playbook | Medium | SRE |
 | Shorten Step 4 wait time from 5 minutes to 2 minutes — the window is useful but 5 minutes extends incident duration unnecessarily | Low | SRE |
 
@@ -98,16 +98,16 @@ The `iamadmin` user was able to push a bad image directly to ECR, bypassing the 
 A container process can start successfully and still serve nothing but errors. ECS has no visibility into what the application inside the container is actually doing. ALB health checks are the only signal that reflects real user-facing behavior. These must be treated as separate, independent health signals.
 
 **2. CodeDeploy auto-rollback only protects against deployment failures, not application failures.**
-If the deployment completes successfully (tasks running, traffic shifted) and the application then starts failing, no automated recovery fires. The on-call engineer owns recovery from that point. This is not a gap unique to this lab — it is a fundamental property of CodeDeploy's design.
+If the deployment completes successfully (tasks running, traffic shifted) and the application then starts failing, no automated recovery fires. The on-call engineer owns recovery from that point. This is not a gap unique to this lab, it is a fundamental property of CodeDeploy's design.
 
 **3. The pipeline is a safety net, not a guarantee.**
 The smoke test caught the bad image when it came through the pipeline. It did not and cannot catch a bad image pushed directly to ECR. The pipeline protects one path. Any other path to production is unprotected. Access controls are the only protection for those paths.
 
 **4. The Step 4 window is a recovery asset.**
-During a blue/green deployment, the original task set remains alive until Step 4 completes. This is not dead time — it is a rollback window. An engineer who catches the problem during Step 4 can roll back instantly without a new deployment. Knowing this window exists and how long it lasts is operationally important.
+During a blue/green deployment, the original task set remains alive until Step 4 completes. This is not dead time, it is a rollback window. An engineer who catches the problem during Step 4 can roll back instantly without a new deployment. Knowing this window exists and how long it lasts is operationally important.
 
 **5. Chaos engineering surfaces real gaps.**
-This exercise was designed to demonstrate a controlled auto-rollback. Instead it produced a real P1 incident with a finding that wasn't anticipated. That is exactly what chaos engineering is for — discovering failure modes before they are discovered by production traffic under uncontrolled conditions.
+This exercise was designed to demonstrate a controlled auto-rollback. Instead it produced a real P1 incident with a finding that wasn't anticipated. That is exactly what chaos engineering is for, discovering failure modes before they are discovered by production traffic under uncontrolled conditions.
 
 ---
 
