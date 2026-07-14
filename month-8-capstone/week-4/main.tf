@@ -87,6 +87,12 @@ module "observability" {
   # ECS service name used as a dimension for CPU and memory alarms
   ecs_service_name = module.compute.ecs_service_name
 
+  # ALB ARN suffix - CloudWatch ALB metrics need the suffix, not the DNS name or full ARN
+  alb_arn_suffix = module.compute.alb_arn_suffix
+
+  # Blue target group ARN suffix - required dimension for the HealthyHostCount alarm
+  blue_target_group_arn_suffix = module.compute.blue_target_group_arn_suffix
+
   # ALB DNS name - passed to the canary as its target URL
   alb_dns_name = module.compute.alb_dns_name
 

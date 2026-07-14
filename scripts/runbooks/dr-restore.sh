@@ -14,7 +14,7 @@ echo "==================================================="
 echo ""
 echo "[1/4] Checking all alarm states..."
 aws cloudwatch describe-alarms \
-	--alarm-names "$ALARM_5XX" "$ALARM_CPU" "$ALARM_MEMORY" "$ALARM_BURN_RATE" "$ALARM_CANARY" "$ALARM_VPC_REJECT" \
+	--alarm-names "$ALARM_5XX" "$ALARM_CPU" "$ALARM_MEMORY" "$ALARM_BURN_RATE" "$ALARM_CANARY" "$ALARM_VPC_REJECT" "$ALARM_ALB_NO_HEALTHY_HOSTS" "$ALARM_ECS_NO_RUNNING_TASKS" \
 	--region "$REGION" \
 	--query "MetricAlarms[*].{Alarm:AlarmName,State:StateValue}" \
 	--output table

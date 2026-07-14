@@ -43,3 +43,13 @@ variable "flow_log_group_name" {
   description = "Name of the CloudWatch Log Group receiving VPC flow logs — used for REJECT metric filter"
   type        = string
 }
+
+variable "alb_arn_suffix" {
+  description = "ARN suffix of the application load balancer, for CloudWatch ALB metric dimensions"
+  type        = string
+}
+
+variable "blue_target_group_arn_suffix" {
+  description = "ARN suffix of the blue target group, for HealthyHostCount dimensions"
+  type        = string
+}

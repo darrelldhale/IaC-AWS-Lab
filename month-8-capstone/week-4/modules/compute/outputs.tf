@@ -40,3 +40,16 @@ output "ecs_log_group_name" {
   value = aws_cloudwatch_log_group.ecs_log_group.name
 }
 
+# ARN suffix of the ALB, required for CloudWatch ALB metrics.
+# CloudWatch dimensions use the suffix (app/name/id), not the full ARN.
+output "alb_arn_suffix" {
+  description = "ARN suffix of the application load balancer, for CloudWatch dimensions"
+  value       = aws_lb.app_load_balancer.arn_suffix
+}
+
+# ARN suffix of the blue target group, required for HealthyHostCount.
+output "blue_target_group_arn_suffix" {
+  description = "ARN suffix of the blue target group, for CloudWatch dimensions"
+  value       = aws_lb_target_group.blue_target_group.arn_suffix
+}
+

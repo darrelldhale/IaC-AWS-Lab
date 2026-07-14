@@ -25,6 +25,8 @@ aws cloudwatch describe-alarms \
     "$ALARM_BURN_RATE" \
     "$ALARM_CANARY" \
     "$ALARM_VPC_REJECT" \
+    "$ALARM_ALB_NO_HEALTHY_HOSTS" \
+    "$ALARM_ECS_NO_RUNNING_TASKS" \
   --query "MetricAlarms[*].{Alarm:AlarmName,State:StateValue}" \
   --output table
 echo ""

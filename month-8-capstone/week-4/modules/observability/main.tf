@@ -583,3 +583,67 @@ resource "aws_cloudwatch_dashboard" "main" {
     ]
   })
 }
+
+# Alarm: ECS running task count dropped to zero
+# This is the fix for the chaos-002 detection gap. During that incident the service was
+# scaled to zero and every log-based alarm (5xx, CPU, memory, burn rate) stayed in OK,
+# because zero running tasks means zero application logs to evaluate. The alarms were
+# not wrong, they were blind: no data arrived, and no data was being treated as healthy.
+#
+# RunningTaskCount is published by ECS itself, not by the application. It reports zero
+# BECAUSE nothing is running, which is exactly the signal the log-based alarms could not
+# produce. treat_missing_data is "breaching" on purpose: if ECS stops reporting entirely,
+# that is an emergency, not an all-clear.
+resource "aws_cloudwatch_metric_alarm" "ecs_no_running_tasks" {
+  alarm_name          = "${local.name_prefix}-ecs-no-running-tasks"
+  comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "RunningTaskCount"
+  namespace           = "ECS/ContainerInsights"
+  period              = "60"
+  statistic           = "Minimum"
+  threshold           = "0"
+  alarm_description   = "ECS service has zero running tasks. Total outage. Log-based alarms cannot detect this."
+  treat_missing_data  = "breaching"
+
+  dimensions = {
+    ClusterName = var.ecs_cluster_name
+    ServiceName = var.ecs_service_name
+  }
+
+  alarm_actions = [aws_sns_topic.alerts.arn]
+  ok_actions    = [aws_sns_topic.alerts.arn]
+
+  tags = local.common_tags
+}
+
+# Alarm: no healthy targets behind the load balancer
+# Broader coverage than RunningTaskCount. This fires whenever nothing can serve traffic,
+# whether that is because no tasks are running OR because tasks are running but failing
+# their health checks. The ALB publishes this metric itself, so like RunningTaskCount it
+# survives the application being completely dead.
+#
+# This is the alarm that would have caught chaos-002 AND the broken-nginx chaos scenario,
+# where containers were up and passing ELB health checks but returning 500 to real traffic.
+resource "aws_cloudwatch_metric_alarm" "alb_no_healthy_hosts" {
+  alarm_name          = "${local.name_prefix}-alb-no-healthy-hosts"
+  comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "HealthyHostCount"
+  namespace           = "AWS/ApplicationELB"
+  period              = "60"
+  statistic           = "Minimum"
+  threshold           = "0"
+  alarm_description   = "ALB has zero healthy targets. Nothing can serve merchant traffic."
+  treat_missing_data  = "breaching"
+
+  dimensions = {
+    LoadBalancer = var.alb_arn_suffix
+    TargetGroup  = var.blue_target_group_arn_suffix
+  }
+
+  alarm_actions = [aws_sns_topic.alerts.arn]
+  ok_actions    = [aws_sns_topic.alerts.arn]
+
+  tags = local.common_tags
+}
