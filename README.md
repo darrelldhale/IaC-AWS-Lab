@@ -1,25 +1,84 @@
 # IaC-AWS-Lab
 
-**A self-directed SRE and cloud infrastructure lab: an 8-month, hands-on build of a production-grade AWS environment defined entirely in Terraform, operated, monitored, deliberately broken, and documented end to end.**
+**A self-directed monitoring and incident-response lab. I built a production-grade AWS environment so I would have a real system to observe, alarm on, deliberately break, and run incidents against, then documented every failure and fix end to end.**
 
-Built and maintained by **Darrell Hale**, Lead Application Support Engineer with a focus on incident response, monitoring, and reliability. Culminated in the **AWS Certified CloudOps Engineer, Associate (SOA-C03)**.
+Built and operated by **Darrell Hale**, Lead Application Support Engineer focused on incident response, monitoring, and reliability. Culminated in the **AWS Certified CloudOps Engineer, Associate (SOA-C03)**.
 
 Contact: look585carbon@gmail.com
 
-> **About this lab:** This is a personal, self-directed learning project, not client or employer work. To keep the engineering decisions realistic, the lab is framed around an illustrative scenario: a mid-sized healthcare organization migrating its on-premises infrastructure to AWS. The scenario is fictional. The infrastructure, the incidents, and the fixes are real and were built and operated by one engineer.
+> **Why this lab exists:** Monitoring and incident response are hard to practice without something real to monitor and break. Reading about golden signals or writing a runbook in the abstract teaches almost nothing. So I built the substrate first, a real load-balanced application running on AWS infrastructure defined entirely in Terraform, specifically so I would have a live system with real metrics, real logs, and real failure modes to work against. The infrastructure is the means. Observability and incident response are the point.
+
+> **About the scenario:** This is a personal learning project, not client or employer work. To keep the engineering decisions realistic, it is framed around an illustrative fictional scenario: a mid-sized healthcare organization migrating off on-premises infrastructure with a lean operations team. That premise forces the constraints that make monitoring and on-call practice meaningful. The scenario is fictional. The infrastructure, the incidents, and the fixes are real and were built and operated by one engineer.
 
 ---
 
-## The Scenario and the Rules
+## What This Lab Is Really About
 
-The illustrative client is a mid-sized healthcare organization with a lean operations team modernizing off of on-premises infrastructure. That premise sets constraints that shaped every decision in the lab:
+The center of gravity is the operational work, not the build:
 
-- **Managed services where possible.** A lean ops team cannot patch servers, manage clusters, or babysit infrastructure. Every service selection favored AWS-managed over self-managed.
-- **No standing server access.** Healthcare compliance demands auditable, IAM-controlled access. No SSH, no bastion hosts, no key pairs. All access via SSM Session Manager.
-- **Infrastructure as code, always.** Every resource defined in Terraform. Nothing clicked together in the console. Infrastructure is reproducible, version-controlled, and destroyable in minutes.
-- **Zero-downtime deployments.** Patient-facing systems cannot tolerate maintenance windows. Deployments use blue/green patterns with instant rollback.
-- **Full observability.** Every service monitored, every incident documented with a post-mortem, runbooks maintained for on-call response.
-- **Automation first.** Manual operation is the enemy. Scripts, pipelines, and SSM documents replace repetitive human work.
+- **Observability I can read under pressure.** A single on-call dashboard covering the golden signals, structured logs queryable by field, SLOs with error budgets and burn-rate alarms, and synthetic canaries that catch failures before users report them.
+- **Incident response with real muscle memory.** An incident playbook, executable runbooks for known failure modes, a triage entry point that routes to alarm-specific investigation scripts, and timed on-call simulations against a live broken system.
+- **Chaos engineering that produces real incidents.** Deliberately breaking the system in controlled ways to find failure modes before production does, then triaging and documenting each one with a post-mortem.
+- **Detection-gap hunting.** Several of the most valuable findings were not the failures themselves but the fact that existing monitoring did not catch them. Closing those gaps is the actual work of a monitoring engineer.
+
+The infrastructure underneath all of this (VPC, ECS Fargate, ALB, blue/green deploys, IaC, CI/CD) is built to production standard because monitoring a toy system teaches toy lessons. But it is the stage, not the play.
+
+---
+
+## The Substrate: What I Am Monitoring
+
+A brief description of the system the observability and incident work runs against, so the rest makes sense:
+
+A load-balanced application running on ECS Fargate behind an Application Load Balancer, deployed blue/green through CodeDeploy, with container images in ECR, all defined in Terraform with remote state in S3 and DynamoDB locking. Access is through SSM Session Manager, so no SSH, no bastion, and a full audit trail. A GitHub Actions pipeline builds, tags, pushes, and deploys on every merge to main. The whole environment stands up from one `terraform apply` and is destroyed and rebuilt daily to control cost.
+
+That is the system under observation. Everything below is about watching it, breaking it, and responding when it breaks.
+
+---
+
+## Monitoring and Observability
+
+Built to run natively in CloudWatch, chosen so the scenario's lean team has no separate observability platform to operate, secure, or license.
+
+- **On-call dashboard.** One CloudWatch dashboard showing the signals that matter during an incident: request rate, error rate, latency, task health, and target-group status. Built in golden-signal reading order so a first responder knows where to look first.
+- **Structured logging.** JSON-formatted nginx logs with CloudWatch metric filters, queryable by field through Logs Insights rather than grep. Filter on the failures that matter, then group and count to turn "something is failing" into "this specific thing is failing."
+- **SLIs, SLOs, and error budgets.** Defined indicators and a 99.9 percent availability objective for the patient-facing service, translated into error budgets and burn-rate alarms that make the reliability-versus-velocity tradeoff concrete rather than theoretical.
+- **Synthetic monitoring.** A CloudWatch Canary runs a scripted check against the ALB endpoint every minute, so failures on quiet paths surface from the absence of expected success, not from waiting for a user to complain.
+- **Alarm configuration as a first-class decision.** Learned directly that an alarm that exists is not an alarm that works. An early build created alarms whose dimensions referenced resource tags instead of the instance ID, so they were never evaluated against a real resource. The fix taught the lesson that carried through the whole lab: verify the alarm actually fires before trusting it.
+
+---
+
+## Incident Response
+
+A complete incident-management practice built from the ground up, then exercised repeatedly against live failures.
+
+- **Incident playbook.** P1 to P4 severity definitions, a five-phase lifecycle (detect, declare, respond, resolve, review), role definitions, and communication templates.
+- **Executable runbooks.** Step-by-step runbooks for known failure modes (task crashes, ALB health-check failures, deployment rollbacks), written to be run under pressure. A `triage.sh` entry point routes to alarm-specific investigate scripts that run the first minutes of response so diagnosis is not improvised.
+- **On-call simulations.** Full incident drills against a live broken system with a runbook and a timer, building triage muscle memory before a real outage would demand it. One simulation recovered a zeroed-out service inside the RTO with the response worked end to end.
+- **Post-mortems.** Every incident triaged with the runbooks, resolved, and documented with root-cause analysis and corrective actions, treating the review phase as where the real learning lives.
+
+---
+
+## Chaos Engineering
+
+The philosophy: chaos engineering is not breaking things for sport. It is finding failure modes in a controlled environment so they are not discovered in production during a critical moment. The most useful chaos runs did not just confirm the system fails, they exposed where monitoring was blind.
+
+- **Broken-image chaos over FIS.** AWS Fault Injection Simulator was the planned tool but proved ineffective against Fargate, which self-heals faster than a scenario can observe the failure. The technique that worked was a deliberately broken nginx image that passes ALB health checks (returns 200 to the health checker) while returning 500 to real traffic, producing a realistic partial outage that monitoring and runbooks had to catch.
+- **A real detection gap, found and closed.** That broken-image run exposed a genuine gap between the CodeDeploy and ALB health checks, and drove a corrective change to the CodeDeploy termination wait time. A synthetic fault would have missed it entirely.
+- **Log-based versus infrastructure-native alarms.** A service scaled to zero went undetected because the log-based alarms watching it went silent when nothing was running to produce logs. The fix was adding infrastructure-native alarms (RunningTaskCount and HealthyHostCount with treat-missing-data set to breaching) that publish from the infrastructure itself regardless of application state. This is the single most important alarm-configuration lesson in the lab.
+- **Pipeline-path chaos.** A deliberately broken build caught by the deployment smoke test, verifying the pipeline fails safely before bad code reaches traffic.
+
+---
+
+## The Substrate Build, In Brief
+
+The infrastructure exists to be monitored, so it is documented here as supporting context rather than the headline. It was built up over the first several months of the lab:
+
+- **Foundations.** Linux internals, production Bash scripting, networking (TCP/IP, DNS, TLS, HTTP), Git, AWS CLI, and IAM. Built the operational scripts used throughout: full state capture, layered health checks, an auto-restart watchdog, multi-source log search, and a Terraform wrapper that runs fmt, validate, and apply with no auto-approve.
+- **AWS infrastructure.** A production-style VPC with public and private subnets and a NAT gateway, with SSM Session Manager replacing SSH entirely.
+- **Infrastructure as code.** Remote state in S3, DynamoDB locking, reusable modules, workspace-aware environments, and a tagging strategy enabling fleet-wide SSM targeting.
+- **Compute and deployment.** Evolved from EC2 with an Auto Scaling Group and ALB, to containers on ECS Fargate, to blue/green deployments through CodeDeploy with automatic rollback. Fargate was chosen because the scenario's team cannot manage EC2 at scale.
+- **Security and cost.** GuardDuty, Security Hub, and AWS Config for continuous detection and posture scoring; VPC Flow Logs with REJECT metric filters and alarms; Secrets Manager and Parameter Store for credentials and config; Cost Explorer, Budgets, and Fargate rightsizing to keep spend visible.
+- **Capstone.** Everything assembled into one production-grade system, reproducible from a single `terraform apply`, with the full observability stack, CI/CD, and chaos scenarios described above running against it.
 
 ---
 
@@ -58,87 +117,18 @@ IaC-AWS-Lab/
 
 ---
 
-## Month Summaries
-
-### Month 1: SRE Foundations
-Established the operational toolkit before touching AWS. Linux internals (processes, signals, cgroups, systemd), production-grade Bash scripting, networking fundamentals (TCP/IP, DNS, TLS, HTTP), Git workflows, AWS CLI, and IAM fundamentals.
-
-Built the scripts used throughout the lab: `sre-snapshot.sh` (full state capture before any change), `sre-healthcheck.sh` (5-layer pass/fail report), `sre-watchdog.sh` (auto-restart with retries), `sre-logdig.sh` (multi-source log search), and `tf-check.sh` (fmt, validate, apply, with no auto-approve).
-
-### Month 2: AWS Infrastructure
-Built the first AWS footprint: a production-style VPC with public and private subnets, NAT Gateway, and an EC2 app server running nginx in a private subnet. SSM Session Manager replaced SSH entirely, so no bastion and no key pairs, with a full audit trail.
-
-Added CloudWatch alarms, SNS alerting, log shipping, and an operational dashboard. Ran early chaos testing to trigger CPU alarms and wrote a full post-mortem documenting root cause and corrective actions.
-
-### Month 3: Infrastructure as Code
-Refactored Month 2's flat Terraform into a production-grade IaC foundation: remote state in S3, DynamoDB state locking, reusable modules, workspace-aware environments, and a six-tag tagging strategy enabling fleet-wide SSM targeting.
-
-Built a custom SSM Document, `SRELab-HealthCheck`, that runs a multi-step health check across the fleet simultaneously, replacing manual SSH-based checks.
-
-### Month 4: Compute, Containers, and Deployment
-Migrated the compute layer from EC2 to containers, evolving through three patterns:
-
-- **EC2 + ASG + ALB:** Launch Template, Auto Scaling Group, Application Load Balancer. A self-healing fleet behind a load balancer.
-- **ECS Fargate:** Containerized the app with Docker, pushed to ECR, deployed on Fargate. No EC2 instances to manage.
-- **Blue/green via CodeDeploy:** Two target groups, two ALB listeners, all-at-once traffic shift with automatic rollback on failure.
-
-Chose Fargate specifically because the scenario's ops team cannot manage underlying EC2 instances at scale.
-
-### Month 5: Observability
-Instrumented the ECS Fargate stack with production-grade observability, chosen to run natively in CloudWatch so the small ops team has no separate observability platform to operate or secure:
-
-- **Structured logging:** JSON-formatted nginx logs with CloudWatch metric filters, queryable by field through Logs Insights rather than grep.
-- **On-call dashboard:** A single CloudWatch dashboard showing the metrics that matter during an incident: request rate, error rate, latency, task health, and target group status.
-- **SLIs, SLOs, and error budgets:** Defined indicators and objectives for the patient-facing service (99.9% availability target) and translated them into error budgets and burn-rate alarms that make the reliability versus velocity tradeoff concrete.
-- **Synthetic monitoring:** A CloudWatch Canary runs a scripted check against the ALB endpoint every minute, catching failures before real users report them.
-
-### Month 6: Incident Management and Chaos Engineering
-Built a complete incident-management practice from the ground up:
-
-- **Incident response playbook and runbook suite:** Step-by-step runbooks for known failure modes (task crashes, ALB health-check failures, deployment rollbacks), written to be executable under pressure. A `triage.sh` entry point plus alarm-specific investigate scripts run the first minutes of response.
-- **Chaos engineering without FIS:** AWS Fault Injection Simulator proved ineffective against Fargate, because the service self-heals faster than a scenario can observe the failure. The technique that worked instead was a deliberately broken nginx image that passes ALB health checks but returns 500 to real traffic, producing a realistic partial outage that monitoring and runbooks had to catch.
-- **On-call simulation:** Ran full incident simulations against a live broken system with a runbook and a timer, building triage muscle memory before a real outage would demand it.
-- **Backup and DR testing:** Verified the infrastructure could be rebuilt from Terraform state in minutes, and documented recovery objectives.
-
-The philosophy: chaos engineering is not breaking things for sport. It is finding failure modes in a controlled environment so they are not found in production during a critical moment.
-
-### Month 7: Security, Networking, and Cost
-**Security:**
-- **GuardDuty, Security Hub, and AWS Config:** Continuous threat detection, security posture scoring, and configuration-drift evaluation across the account, with findings triaged as part of the operational workflow.
-- **VPC Flow Logs:** Network traffic logged at the VPC level, with REJECT metric filters and alarms for detecting unexpected traffic patterns.
-- **Secrets Manager and Parameter Store:** Credentials and certificates stored and rotated automatically. Non-sensitive config versioned centrally and delivered to tasks via IAM, never hardcoded into images or committed to state.
-
-**Cost:**
-- **Cost Explorer and Budgets:** Spend tracked by service and tag, with budget alerts that fire before overspend, not after the invoice.
-- **Rightsizing:** Fargate task CPU and memory reviewed against actual utilization, since over-allocated tasks are direct waste under per-vCPU pricing.
-
-Native AWS security services were chosen because the scenario's team cannot operate or license a separate security stack.
-
-### Month 8: Capstone
-Everything from the prior seven months assembled into a single production-grade system, reproducible from one `terraform apply`:
-
-- **The stack:** A load-balanced ECS Fargate application behind an ALB, deployed blue/green through CodeDeploy, with images in ECR, all defined in Terraform with remote state.
-- **CI/CD pipeline:** GitHub Actions builds the Docker image on every push to main, tags it with the commit SHA, pushes to ECR, and triggers a CodeDeploy blue/green deployment automatically.
-- **Full observability:** Structured logging, CloudWatch dashboards, SLO burn-rate alarms, and synthetic monitoring, so one dashboard tells the on-call engineer what they need.
-- **Chaos engineering:** Two controlled chaos scenarios run against the live system. A pipeline-path failure caught by the deployment smoke test, and a manual bad-image push that exposed a gap between the CodeDeploy and ALB health checks. The second produced a real post-mortem and a corrective change to the CodeDeploy termination wait time.
-- **Post-mortem and portfolio:** Each incident triaged with the runbooks, resolved, and documented with root cause analysis. A written SRE portfolio summarizes the system, the decisions, the incidents, and the lessons.
-
-The capstone is evidence that this infrastructure can be built, operated, broken, fixed, and handed off by one engineer, with documented process, in a way that scales.
-
----
-
 ## Key Decisions and Lessons Learned
 
-**SSM over SSH.** No bastion, no key pairs. SSM Session Manager provides auditable, IAM-controlled shell access, required for the scenario's compliance posture.
+**Infrastructure-native alarms over log-based alarms for liveness.** Log-based alarms go blind when nothing is running to produce logs, which is exactly when you most need to know. Metrics that publish from the infrastructure itself catch a service scaled to zero when a log-based alarm never fires. This was the highest-value monitoring lesson in the lab.
 
-**Fargate over EC2.** A lean ops team cannot absorb EC2 patching, capacity planning, and AMI management for the container workload.
+**An alarm that exists is not an alarm that works.** An early alarm was never evaluated because its dimensions pointed at resource tags instead of the instance ID. Verifying that an alarm actually fires became a standing habit.
 
-**Blue/green over rolling.** Rolling deployments create a window where old and new versions serve traffic at once. For patient-facing systems that is unacceptable, so blue/green shifts all traffic at once with instant rollback.
+**Broken-image chaos over FIS.** FIS could not outrun Fargate's self-healing. A broken image that passes health checks while failing real traffic produced far more realistic incidents, and exposed a genuine CodeDeploy versus ALB health-check gap a synthetic fault would have missed.
 
-**Remote state from day one.** S3 backend with DynamoDB locking prevents state corruption and makes infrastructure recoverable from any machine.
+**CloudWatch-native observability over a separate platform.** A lean team cannot operate, secure, or license a second observability stack. Leading with CloudWatch depth kept the whole practice inside one pane of glass.
 
-**Destroy nightly, rebuild daily.** NAT Gateways and load balancers cost money. IaC makes rebuilding trivial, so non-production infrastructure is destroyed overnight and rebuilt each morning in minutes.
+**SSM over SSH.** No bastion, no key pairs. SSM Session Manager provides auditable, IAM-controlled access, required for the scenario's compliance posture.
 
-**Broken-image chaos over FIS.** FIS was the planned chaos tool but proved ineffective against Fargate's fast self-healing. A deliberately broken nginx image that passes health checks while failing real traffic produced far more realistic incidents, and exposed a genuine CodeDeploy versus ALB health-check gap that a synthetic fault would have missed.
+**Fargate over EC2, blue/green over rolling.** A lean ops team cannot absorb EC2 patching at scale, and patient-facing systems cannot tolerate the mixed-version window a rolling deploy creates.
 
-**CloudWatch dimensions bug (early build).** Alarms were created but never evaluated. Root cause: the dimensions block referenced resource tags instead of the instance ID, so the alarm was never pointed at an actual resource. Fixed by correcting the dimensions to reference the EC2 instance ID directly. A good early lesson that an alarm that exists is not the same as an alarm that works.
+**Destroy nightly, rebuild daily.** NAT gateways and load balancers cost money. IaC makes rebuilding trivial, so non-production infrastructure is torn down overnight and rebuilt each morning in minutes.
