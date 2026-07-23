@@ -5,9 +5,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
 
 echo "==================================================="
-echo " NORTHWIND HEALTH GROUP DR RUNBOOK: Service Restore"
+echo " NORTHWIND HEALTH GROUP DR RUNBOOK: Morning First Check"
 echo " $(date -u '+%Y-%m-%d %H:%M:%S') UTC"
-echo " Scenario: Bad deployment — restore to known-good state"
 echo "==================================================="
 
 # --- STEP 1: Current Alarm State ---
